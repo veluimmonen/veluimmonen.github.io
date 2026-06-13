@@ -5,11 +5,11 @@
    =========================== */
 
 :root {
-  --bg:          #0a0f1a;
-  --bg-card:     #0f1624;
-  --bg-raised:   #131d2e;
-  --border:      #1e2d3d;
-  --border-soft: #162030;
+  --bg:          #0a0a0e;
+  --bg-card:     #0f0f15;
+  --bg-raised:   #131319;
+  --border:      #1a1a26;
+  --border-soft: #131320;
   --text:        #e2e8f0;
   --text-muted:  #94a3b8;
   --text-dim:    #475569;
@@ -26,8 +26,22 @@
    Base
    =========================== */
 
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #1e2a3a; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--teal-dark); }
+* { scrollbar-width: thin; scrollbar-color: #1e2a3a var(--bg); }
+
 body {
   background-color: var(--bg) !important;
+  /* Subtle teal glow from top-left */
+  background-image: radial-gradient(
+    ellipse 60% 50% at -5% -10%,
+    rgba(6, 182, 212, 0.07) 0%,
+    transparent 70%
+  ) !important;
+  background-attachment: fixed !important;
   color: var(--text) !important;
   font-family: var(--font-body) !important;
   font-size: 17px;
@@ -152,7 +166,8 @@ mjx-container { color: var(--teal) !important; }
    Layout
    =========================== */
 
-#quarto-content { background: var(--bg) !important; }
+#quarto-content { background: transparent !important; }
+#quarto-document-content { background: transparent !important; }
 
 .page-layout-full .content,
 .page-layout-article .content {
