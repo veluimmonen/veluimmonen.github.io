@@ -1,12 +1,12 @@
-title: "Your Name"
-description: "Brief description of who you are."
+title: "Velu Immonen"
+description: "PhD Student at Southampton Solent University. Studying the relationship between muscle size and strength."
 baseurl: ""
-url: "https://yourusername.github.io"
+url: "https://veluimmonen.github.io"
 
 # Author
 author:
-  name: "Your Name"
-  email: "you@example.com"
+  name: "Velu Immonen"
+  email: "velu.immonen@gmail.com"
 
 # Build settings
 markdown: kramdown
