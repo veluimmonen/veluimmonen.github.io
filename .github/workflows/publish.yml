@@ -29,7 +29,8 @@ jobs:
           r-version: '4.4.0'
 
       - name: Install R packages
-        run: install.packages(c("shiny", "ggplot2", "patchwork"))
+        run: |
+          install.packages(c("rmarkdown", "knitr", "shiny", "ggplot2", "patchwork"))
         shell: Rscript {0}
 
       - name: Install shinylive extension
