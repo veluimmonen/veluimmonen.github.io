@@ -1,14 +1,14 @@
 ---
 title: "Blog"
-subtitle: "Writing on [your topics]."
+subtitle: "Writing on exercise science, causal inference, and statistics."
 page-layout: full
 toc: false
 listing:
   contents: posts
   sort: "date desc"
-  type: table
-  fields: [date, title, description]
-  date-format: "YYYY-MM-DD"
+  type: default
+  fields: [date, reading-time, title, description]
+  date-format: "MMMM YYYY"
   sort-ui: false
   filter-ui: false
 ---
