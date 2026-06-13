@@ -6,20 +6,20 @@ toc: false
 
 ::: {.home-hero}
 ::: {.eyebrow}
-Your City · Your Field
+Southampton Solent University · Exercise Science
 :::
 
-# Your Name.
+# Velu Immonen.
 
 ::: {.tagline}
-One or two sentences on who you are and what you care about.
-Write something that's true and interesting.
+PhD student researching the relationship between muscle size and strength.
+Based in Southampton.
 :::
 
 ::: {.home-ctas}
 [Selected Works](works.qmd){.btn .btn-primary}
 [Blog](blog.qmd){.btn .btn-outline}
-[GitHub](https://github.com/yourusername){.btn .btn-outline}
+[GitHub](https://github.com/veluimmonen){.btn .btn-outline}
 :::
 :::
 
@@ -29,7 +29,12 @@ Recent writing
 :::
 
 ```{=html}
-<div id="recent-posts-placeholder"></div>
+<div class="recent-posts-list">
+  <!-- Quarto listing will populate this via blog.qmd -->
+  <p style="color: var(--fp-text-muted); font-size: 0.9rem;">
+    Posts will appear here once published. See the <a href="blog.html">blog archive</a>.
+  </p>
+</div>
 ```
 
 :::
