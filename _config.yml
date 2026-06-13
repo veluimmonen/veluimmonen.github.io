@@ -1,0 +1,26 @@
+title: "Your Name"
+description: "Brief description of who you are."
+baseurl: ""
+url: "https://yourusername.github.io"
+
+# Author
+author:
+  name: "Your Name"
+  email: "you@example.com"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: /blog/:year/:month/:day/:title/
+
+# Plugins (safe for GitHub Pages)
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from build
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules

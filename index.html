@@ -1,0 +1,30 @@
+---
+layout: default
+title: Home
+---
+
+<div class="home-hero">
+  <p class="eyebrow">Your City · Your Field</p>
+  <h1>Your Name.</h1>
+  <p class="tagline">
+    One or two sentences on who you are and what you care about.
+    Write something that's true and interesting.
+  </p>
+  <div class="home-ctas">
+    <a href="/works" class="btn btn-primary">Selected Works</a>
+    <a href="/blog" class="btn">Blog</a>
+    <a href="https://github.com/yourusername" class="btn" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div>
+
+<div class="home-section">
+  <p class="home-section-label">Recent writing</p>
+  <div class="home-posts">
+    {% for post in site.posts limit:5 %}
+    <div class="home-post-item">
+      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <span class="home-post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
