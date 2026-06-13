@@ -1,0 +1,35 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Your Name"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: works.qmd
+        text: Works
+      - href: blog.qmd
+        text: Blog
+    right:
+      - icon: github
+        href: https://github.com/yourusername
+      - icon: twitter-x
+        href: https://twitter.com/yourusername
+  page-footer:
+    left: "© Your Name"
+    right:
+      - text: "Home"
+        href: index.qmd
+      - text: "Works"
+        href: works.qmd
+      - text: "Blog"
+        href: blog.qmd
+
+format:
+  html:
+    theme: [darkly, assets/css/custom.css]
+    toc: false
+    link-external-newwindow: true
+    smooth-scroll: true

@@ -1,0 +1,29 @@
+# Quarto
+/.quarto/
+_site/
+
+# Jekyll (legacy - safe to delete these files)
+_config.yml
+Gemfile
+Gemfile.lock
+_layouts/
+_posts/
+blog/
+vendor/
+.bundle/
+.jekyll-cache/
+assets/css/style.css
+index.html
+works.html
+
+# OS
+.DS_Store
+
+# R
+.Rhistory
+.Rdata
+.Rproj.user/
+
+# docs/ is committed — GitHub Pages serves from it
+
+**/*.quarto_ipynb

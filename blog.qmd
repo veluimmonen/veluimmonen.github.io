@@ -1,0 +1,14 @@
+---
+title: "Blog"
+subtitle: "Writing on [your topics]."
+page-layout: full
+toc: false
+listing:
+  contents: posts
+  sort: "date desc"
+  type: table
+  fields: [date, title, description]
+  date-format: "YYYY-MM-DD"
+  sort-ui: false
+  filter-ui: false
+---

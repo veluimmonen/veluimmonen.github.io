@@ -1,0 +1,141 @@
+---
+title: "Selected Works"
+subtitle: "A selection of projects, research, and writing across [your fields]."
+page-layout: full
+toc: true
+toc-title: "Jump to"
+---
+
+::: {.page-intro}
+A paragraph about you — what you've built, your background, what you care about.
+This is where a few sentences capture the arc of your career.
+
+::: {.awards-row}
+[★ Award or Recognition · Year]{.award-chip}
+[★ Another Award or Recognition]{.award-chip}
+:::
+:::
+
+---
+
+## Early Work {#early}
+
+*2005 — 2013 · Employer or Context*
+
+A sentence or two describing this phase of your career — what you were focused on,
+who you worked for, what the era produced.
+
+::: {.work-card}
+::: {.work-badge}
+★ Flagship Project
+:::
+
+### Project Name
+
+*Type of Work · Year · Context*
+
+Describe what this project was, what problem it solved, why it mattered.
+Be specific — concrete details are more convincing than vague claims.
+
+> "A direct quote from the work, a paper, a talk, or a press mention.
+> Quotes add credibility and give the reader a sense of voice." — Source, Year
+
+::: {.work-links}
+[Paper](#){.work-link}
+[GitHub](#){.work-link}
+[Write-up](#){.work-link}
+:::
+:::
+
+::: {.work-card}
+::: {.work-badge}
+♦ Notable Work
+:::
+
+### Another Project
+
+*Type · Year*
+
+Description of this project. Keep it focused on outcomes and impact rather than
+process — what did it enable, what did it discover, who used it?
+
+::: {.work-links}
+[Link](#){.work-link}
+:::
+:::
+
+---
+
+## Main Area of Work {#main}
+
+*2014 — 2020 · Employer or Context*
+
+Description of this phase. What was the focus? What did you build or contribute?
+
+::: {.work-card}
+::: {.work-badge}
+★ Flagship Project
+:::
+
+### Major Project Name
+
+*Tool / Framework / Research · Year · 1,000+ stars*
+
+Detailed description of the project. What was novel about it? What technique or
+approach did it use? What was the reception?
+
+> "A representative quote from the work or a description of the key contribution." — Source
+
+::: {.work-links}
+[GitHub](#){.work-link}
+[Paper](#){.work-link}
+[Talk](#){.work-link}
+:::
+:::
+
+---
+
+## Recent Work {#recent}
+
+*2021 — Present*
+
+What are you working on now? What's the current focus?
+
+::: {.work-card}
+::: {.work-badge}
+★ Current Project
+:::
+
+### Current Main Project
+
+*Research / Tool / Framework · 2023–Present · arXiv Paper*
+
+What is this? What problem does it solve? What makes it different from existing approaches?
+Include quantitative results if you have them.
+
+> "A key insight or finding from the work." — Source, Year
+
+::: {.work-links}
+[GitHub](#){.work-link}
+[Paper](#){.work-link}
+:::
+:::
+
+---
+
+## Writings {#writings}
+
+### Topic Area One
+
+| Year | Title |
+|------|-------|
+| 2025 | [Title of an Article or Post](#) |
+| 2024 | [Another Article](#) |
+| 2023 | [An Older Post](#) |
+
+### Topic Area Two
+
+| Year | Title |
+|------|-------|
+| 2026 | [Recent Piece](#) |
+| 2025 | [Another Piece](#) |

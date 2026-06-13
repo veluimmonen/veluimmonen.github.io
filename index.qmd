@@ -1,0 +1,35 @@
+---
+title: ""
+page-layout: full
+toc: false
+---
+
+::: {.home-hero}
+::: {.eyebrow}
+Your City · Your Field
+:::
+
+# Your Name.
+
+::: {.tagline}
+One or two sentences on who you are and what you care about.
+Write something that's true and interesting.
+:::
+
+::: {.home-ctas}
+[Selected Works](works.qmd){.btn .btn-primary}
+[Blog](blog.qmd){.btn .btn-outline}
+[GitHub](https://github.com/yourusername){.btn .btn-outline}
+:::
+:::
+
+::: {.home-section}
+::: {.section-label}
+Recent writing
+:::
+
+```{=html}
+<div id="recent-posts-placeholder"></div>
+```
+
+:::
