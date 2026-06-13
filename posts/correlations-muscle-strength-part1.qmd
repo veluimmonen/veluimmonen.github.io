@@ -2,6 +2,7 @@
 title: "Why Correlations Can't Tell Us Whether Muscle Size Causes Strength"
 subtitle: "Part I of III — Associations and Their Discontents"
 date: "2026-06-13"
+bibliography: bibliography.bib
 categories: [causal inference, muscle physiology, statistics, simulation]
 description: >
   Correlations between changes in muscle size and strength vary wildly across
@@ -51,13 +52,15 @@ That question is causal. Correlations are not. This is not a philosophical disti
 
 ---
 
-## Part I — Three Ways Associations Arise
+## Three Ways Associations Arise
 
-Association: two variables are associated if information about one tells you something about the likelihood of the other (statistical correlation)
+> **Association:** two variables are associated if information about one 
+> tells you something about the likelihood of the other. A correlation 
+> coefficient measures this. It says nothing about why.
 
-Every systematic association between muscle size ($M$) and strength ($S$) traces back to one of three causal structures — or, in small samples, to chance alone. We can represent these structures with **directed acyclic graphs (DAGs)**, where an arrow from $A$ to $B$ means "$A$ is a cause of $B$." No arrow means no direct causal relationship. What makes DAGs useful is that they let us read off, just from the diagram, which variables we would expect to be associated — and why. Below we walk through each scenario in turn.
+Every systematic association between muscle size ($M$) and strength ($S$) traces back to one of three causal structures — or, in small samples, to chance alone @CausalInferenceWhat. We can represent these structures with **directed acyclic graphs (DAGs)**, where an arrow from $A$ to $B$ means "$A$ is a cause of $B$." No arrow means no direct causal relationship. What makes DAGs useful is that they let us read off, just from the diagram, which variables we would expect to be associated — and why. Below we walk through each scenario in turn.
 
-### Structure 1 — Direct Causation
+### Reason 1 — Direct Causation
 
 ```{=html}
 <div class="dag-figure">
@@ -83,7 +86,7 @@ In this scenario, muscle growth directly causes strength to increase. This is wh
 
 A helpful way to think about DAGs is to imagine the arrows as pipes through which association can flow. If two variables are connected by a pipe, they will tend to move together. In this scenario, M and S are connected by a single direct pipe — so when M goes up, S tends to go up too. The trouble, as we will see, is that pipes can carry association between variables even when neither causes the other.
 
-### Structure 2 — Common Cause (Confounding)
+### Reason 2 — Common Cause (Confounding)
 
 ```{=html}
 <div class="dag-figure">
@@ -115,7 +118,7 @@ In this scenario, neither M nor S causes the other. Instead, both are driven by 
 
 This means that if you learn someone gained a lot of muscle over a training block, you would reasonably update your expectation of their strength gains upward — not because muscle caused the strength gain, but because both are downstream of the same training stimulus. A correlation between $\Delta M$ and $\Delta S$ will appear, and it may be substantial, even when the direct effect of M on S is exactly zero.
 
-### Structure 3 — Collider Bias (Selection)
+### Reason 3 — Collider Bias
 
 ```{=html}
 <div class="dag-figure">
@@ -148,8 +151,6 @@ This means that if you learn someone gained a lot of muscle over a training bloc
 </div>
 ```
 
-### Scenario 3 — Collider Bias (Selection)
-
 In this scenario, M and S are again causally unrelated — and unlike Scenario 2, they do not even share a common cause. Both independently influence a third variable: whether a participant completes the study. Someone who gained little muscle might still complete the programme because their strength progressed well enough to keep them motivated, and vice versa. Study completion is therefore a common *effect* of both M and S — a collider.
 
 Here is the key insight: in the full population, M and S are independent. Learning that someone gained a lot of muscle tells you nothing about their strength gains, because there is no pipe connecting them — the only path runs through the collider, and colliders, unlike common causes, *block* the flow of association rather than transmitting it.
@@ -158,7 +159,7 @@ But the moment we restrict our analysis to completers — conditioning on the co
 
 ---
 
-### 🔬 Simulation 1 — Which World Are We In?
+### 🔬 Simulation
 
 The simulation below generates data from three different causal worlds. Rather 
 than letting you dial in arbitrary values, we have pre-set the parameters to 
@@ -515,423 +516,36 @@ shinyApp(ui, server)
 ::: {.callout-tip}
 ## What to look for
 
-- **Scenario 1:** The causal share of variance tells you what fraction of the 
-  observed correlation is genuinely due to M causing S. Even here, the 
-  correlation overstates the isolated causal effect because training drives 
-  both simultaneously.
-- **Scenario 2:** Set *Size → Strength* is already at zero — yet watch a 
-  meaningful correlation appear, driven entirely by training as a shared cause. 
-  This mirrors the logic behind Ahtiainen et al. (2016).
+- **Scenario 1:** Even when M genuinely causes S, the observed correlation 
+  reflects more than just that causal effect — training is simultaneously 
+  pushing both variables up, inflating the association beyond what the M→S 
+  arrow alone would produce. The causal share displayed is the fraction of 
+  variance in S attributable to M in this simplified model — an upper bound, 
+  not a precise estimate.
+- **Scenario 2:** The Size → Strength effect is set to zero — yet a meaningful 
+  correlation appears, driven entirely by training as a shared upstream cause. 
+  Try resampling several times to see how stable it is.
 - **Scenario 3:** Grey points are the full population — M and S are completely 
   independent. Red points are athletes who made it into a competitive powerlifting 
   dataset. The regression line is fitted to red points only. A spurious 
-  association emerges purely from who got selected.
+  association emerges purely from who got selected, not from any biological 
+  relationship between the two variables.
 :::
 
 ---
 
-## Part II — The Scale Problem: Additive vs. Multiplicative Worlds
 
-Suppose we grant, for the sake of argument, that muscle size truly causes
-strength — Structure 1 is the true DAG. We would still face a second, independent
-problem: **we do not know the functional form of the biological relationship.**
+## Conclusion
 
-Consider two hypothetical worlds:
+The three scenarios above share a common thread: in each one, a researcher running a standard correlation analysis would observe an association between $\Delta M$ and $\Delta S$ and face the same temptation — to read it as evidence that muscle growth drives strength gains. In Scenario 1, that interpretation would be directionally correct but would still overstate the isolated contribution of size. In Scenarios 2 and 3, it would be entirely wrong.
 
-**World A — Additive:** Each additional cm³ of muscle adds the same absolute
-number of Newtons, regardless of starting size. The relationship between ΔSize
-and ΔStrength is linear on absolute scales.
+This is not a criticism of the researchers who run these studies. Most papers in this literature are careful — they report associations and note, somewhere in the discussion, that causation cannot be inferred. The problem is that the moment a finding enters circulation, the causal reading tends to follow automatically. We see a correlation of 0.9 and hear that muscle size drives strength. The disclaimer quietly disappears.
 
-**World B — Multiplicative:** Each additional cm³ of muscle adds the same
-*percentage* of current force production. Somebody who starts stronger gains
-more absolute Newtons from the same volume growth than somebody who starts
-weaker.
+What we need is not more careful disclaimers. We need a framework that makes explicit what we are assuming when we move from an observed association to a causal claim — and that allows us to ask whether those assumptions are reasonable given what we know about how training adaptations work. That framework exists, and it is the subject of Part II.
 
-Both are biologically plausible — the truth is probably somewhere between them.
-But they have radically different implications for what a correlation study
-shows, depending on which scale the researcher chooses.
+---
 
-### Why the scale of measurement changes everything
+## References
 
-Researchers routinely express both hypertrophy and strength gains as *percentage
-changes* from baseline — partly for comparability. But in a multiplicative world,
-percentage changes on both sides correlate strongly with each other even if the
-absolute relationship is noisy. In an additive world, using percentage changes
-introduces a spurious association driven by baseline values: someone who starts
-small gains a large percentage from a small absolute gain, while a large person's
-identical absolute gain registers as a small percentage. The correlation you
-observe is partly about the biology, and partly about where your participants
-happened to start.
-
-::: {.callout-note}
-## The Marques et al. r = 0.92 through this lens
-
-The within-person r = 0.92 uses percentage changes as the outcome. In a
-multiplicative world with within-person comparison (which is *guaranteed* — each
-person is compared to themselves), baseline-size noise that would inflate the
-percentage-change correlation between subjects is already perfectly controlled.
-The high r is more informative about the **data structure** than about the causal
-magnitude.
+::: {#refs}
 :::
-
----
-
-### 🔬 Simulation 2 — Does the Scale Lie?
-
-200 participants with varying baseline muscle size and strength. Toggle between
-an additive and multiplicative world, then compare the correlations on absolute
-vs. percentage-change scales. Slide *baseline variability* up to see the
-discrepancy grow.
-
-```{shinylive-r}
-#| standalone: true
-#| viewerHeight: 620
-
-library(shiny)
-library(ggplot2)
-library(patchwork)
-
-ui <- fluidPage(
-  tags$style(HTML("
-    body { font-family: 'Helvetica Neue', sans-serif; font-size:13px; }
-    .well { background:#f8f8f8; border:1px solid #ddd; padding:12px; }
-    h4 { font-size:13px; font-weight:700; text-transform:uppercase;
-         letter-spacing:0.08em; color:#2c6e8a; margin-bottom:10px; }
-    .stat-label { font-size:11px; color:#777; text-transform:uppercase; letter-spacing:.1em; }
-    .stat-value { font-size:1.3rem; font-weight:700; }
-  ")),
-  fluidRow(
-    column(4,
-      wellPanel(
-        h4("Data-generating world"),
-        radioButtons("dgp", NULL,
-          choices=c("Additive"="additive","Multiplicative"="multiplicative"),
-          selected="additive"),
-        hr(),
-        h4("Parameters"),
-        sliderInput("beta",    "True causal effect (β)",
-                    min=0, max=1, value=0.5, step=0.05),
-        sliderInput("baseVar", "Baseline variability",
-                    min=0.1, max=1, value=0.5, step=0.05),
-        sliderInput("noise2",  "Noise",
-                    min=0.05, max=1, value=0.3, step=0.05),
-        sliderInput("n2",      "N",
-                    min=50, max=500, value=200, step=50),
-        actionButton("resample2","Resample",class="btn btn-primary btn-sm")
-      )
-    ),
-    column(8,
-      plotOutput("two_plots", height="340px"),
-      hr(),
-      fluidRow(
-        column(3,
-          div(class="stat-label","r (absolute)"),
-          div(class="stat-value",style="color:#2c6e8a",textOutput("r_abs",inline=TRUE))
-        ),
-        column(3,
-          div(class="stat-label","r (percentage)"),
-          div(class="stat-value",style="color:#2d7d46",textOutput("r_pct",inline=TRUE))
-        ),
-        column(3,
-          div(class="stat-label","|r_abs − r_pct|"),
-          div(class="stat-value",style="color:#c0392b",textOutput("r_gap",inline=TRUE))
-        ),
-        column(3,
-          div(class="stat-label","True β"),
-          div(class="stat-value",style="color:#555",textOutput("beta_out",inline=TRUE))
-        )
-      ),
-      p(style="font-size:12px;color:#777;margin-top:10px;",
-        "The gap between the two correlations is entirely an artefact of scale choice — ",
-        "not a change in the underlying biology.")
-    )
-  )
-)
-
-server <- function(input, output, session) {
-
-  sim2 <- reactive({
-    input$resample2
-    n   <- input$n2
-    b   <- input$beta
-    bv  <- input$baseVar
-    sig <- input$noise2
-
-    S0  <- pmax(0.2, 1 + bv * rnorm(n))
-    F0  <- pmax(0.2, 1 + bv * rnorm(n))
-
-    dS_abs <- pmax(0.01, 0.1 + 0.05 * rnorm(n) + sig * 0.03 * rnorm(n))
-
-    if (input$dgp == "additive") {
-      dF_abs <- b * dS_abs + sig * 0.08 * rnorm(n)
-    } else {
-      pct_s  <- dS_abs / S0
-      pct_f  <- b * pct_s + sig * 0.05 * rnorm(n)
-      dF_abs <- pct_f * F0
-    }
-
-    data.frame(
-      dS_abs = dS_abs,
-      dF_abs = dF_abs,
-      pct_dS = dS_abs / S0,
-      pct_dF = dF_abs / pmax(0.01, F0)
-    )
-  })
-
-  output$two_plots <- renderPlot({
-    d <- sim2()
-    r_abs <- cor(d$dS_abs, d$dF_abs)
-    r_pct <- cor(d$pct_dS, d$pct_dF)
-
-    p1 <- ggplot(d, aes(dS_abs, dF_abs)) +
-      geom_point(colour="#2c6e8a", alpha=0.35, size=1.8) +
-      geom_smooth(method="lm", se=TRUE, colour="#c0392b",
-                  fill="#e74c3c", alpha=0.12, linetype="dashed", linewidth=0.8) +
-      labs(x="Δ Size (absolute)", y="Δ Strength (absolute)",
-           title=sprintf("Absolute  —  r = %.2f", r_abs)) +
-      theme_minimal(base_size=12) +
-      theme(plot.title=element_text(face="bold", colour="#2c6e8a"))
-
-    p2 <- ggplot(d, aes(pct_dS, pct_dF)) +
-      geom_point(colour="#2d7d46", alpha=0.35, size=1.8) +
-      geom_smooth(method="lm", se=TRUE, colour="#c0392b",
-                  fill="#e74c3c", alpha=0.12, linetype="dashed", linewidth=0.8) +
-      labs(x="% Δ Size", y="% Δ Strength",
-           title=sprintf("Percentage  —  r = %.2f", r_pct)) +
-      theme_minimal(base_size=12) +
-      theme(plot.title=element_text(face="bold", colour="#2d7d46"))
-
-    p1 + p2
-  })
-
-  output$r_abs  <- renderText({ d<-sim2(); sprintf("%.2f", cor(d$dS_abs,d$dF_abs)) })
-  output$r_pct  <- renderText({ d<-sim2(); sprintf("%.2f", cor(d$pct_dS,d$pct_dF)) })
-  output$r_gap  <- renderText({
-    d<-sim2()
-    sprintf("%.2f", abs(cor(d$dS_abs,d$dF_abs) - cor(d$pct_dS,d$pct_dF)))
-  })
-  output$beta_out <- renderText({ sprintf("%.2f", input$beta) })
-}
-
-shinyApp(ui, server)
-```
-
-> In the **additive world**, push baseline variability to 0.8 and watch the
-> percentage-change correlation diverge from the absolute one — the two are
-> measuring different things. In the **multiplicative world**, the roles reverse.
-> The biology did not change; only the analyst's choice of scale did.
-
----
-
-## Part III — Putting It Together: The Identification Problem
-
-Even if we know the true causal structure *and* the correct scale, a further
-problem remains: **a wide range of true causal worlds can produce the same
-observed correlation.** The simulation below lets you adjust all parameters
-simultaneously. The grey band marks r ∈ [0.85, 0.95] — roughly what Marques
-et al. observed. See how many distinct causal configurations land inside it.
-
-```{shinylive-r}
-#| standalone: true
-#| viewerHeight: 600
-
-library(shiny)
-library(ggplot2)
-
-ui <- fluidPage(
-  tags$style(HTML("
-    body { font-family:'Helvetica Neue',sans-serif; font-size:13px; }
-    .well { background:#f8f8f8; border:1px solid #ddd; padding:12px; }
-    h4 { font-size:13px; font-weight:700; text-transform:uppercase;
-         letter-spacing:.08em; color:#2c6e8a; margin-bottom:10px; }
-    .stat-label { font-size:11px; color:#777; text-transform:uppercase; letter-spacing:.1em; }
-    .stat-value { font-size:1.3rem; font-weight:700; }
-    #target_msg { font-weight:700; font-size:1rem; padding:6px 12px; border-radius:3px; }
-  ")),
-  fluidRow(
-    column(4,
-      wellPanel(
-        h4("Causal structure"),
-        sliderInput("s3_direct", "Direct effect: Size → Strength",
-                    min=0, max=1, value=0.4, step=0.05),
-        sliderInput("s3_common", "Common cause: Training → both",
-                    min=0, max=1, value=0.6, step=0.05),
-        h4("Measurement"),
-        sliderInput("s3_scale",  "Scale (0 = absolute, 1 = % change)",
-                    min=0, max=1, value=1.0, step=0.05),
-        sliderInput("s3_bv",     "Baseline variability",
-                    min=0.1, max=1, value=0.5, step=0.05),
-        h4("Noise & sample"),
-        sliderInput("s3_noise",  "Noise",
-                    min=0.05, max=0.8, value=0.25, step=0.05),
-        sliderInput("s3_n",      "N",
-                    min=50, max=500, value=200, step=50),
-        actionButton("resample3","Resample",class="btn btn-primary btn-sm")
-      )
-    ),
-    column(8,
-      plotOutput("scatter3", height="320px"),
-      hr(),
-      fluidRow(
-        column(3,
-          div(class="stat-label","Observed r"),
-          div(class="stat-value", textOutput("r3_obs", inline=TRUE))
-        ),
-        column(3,
-          div(class="stat-label","Causal fraction"),
-          div(class="stat-value",style="color:#2d7d46", textOutput("r3_causal", inline=TRUE))
-        ),
-        column(3,
-          div(class="stat-label","Confound fraction"),
-          div(class="stat-value",style="color:#c0392b", textOutput("r3_confound", inline=TRUE))
-        ),
-        column(3,
-          uiOutput("target_msg")
-        )
-      ),
-      p(style="font-size:12px;color:#777;margin-top:10px;",
-        "Grey band = target r ∈ [0.85, 0.95] (approx. Marques et al. 2025). ",
-        "How many different causal worlds hit the same target?")
-    )
-  )
-)
-
-server <- function(input, output, session) {
-
-  sim3 <- reactive({
-    input$resample3
-    n    <- input$s3_n
-    b_d  <- input$s3_direct
-    b_c  <- input$s3_common
-    sig  <- input$s3_noise
-    sc   <- input$s3_scale
-    bv   <- input$s3_bv
-
-    training <- rnorm(n)
-    S0 <- pmax(0.2, 1 + bv * rnorm(n))
-    F0 <- pmax(0.2, 1 + bv * rnorm(n))
-
-    dS_abs <- pmax(0.01, b_c * training * 0.15 + 0.08 + sig * 0.05 * rnorm(n))
-    dF_direct  <- b_d * dS_abs
-    dF_common  <- b_c * training * 0.15
-    dF_abs <- dF_direct + dF_common + sig * 0.05 * rnorm(n)
-
-    # blend between absolute and % scale
-    x_mix <- (1 - sc) * dS_abs + sc * (dS_abs / S0)
-    y_mix <- (1 - sc) * dF_abs + sc * (dF_abs / pmax(0.01, F0))
-
-    list(
-      x = x_mix, y = y_mix,
-      causal_frac  = b_d^2 / (b_d^2 + b_c^2 + sig^2 + 1e-4),
-      confound_frac = b_c^2 / (b_d^2 + b_c^2 + sig^2 + 1e-4)
-    )
-  })
-
-  output$scatter3 <- renderPlot({
-    s   <- sim3()
-    r   <- cor(s$x, s$y)
-    d   <- data.frame(x=s$x, y=s$y)
-
-    # y-range for target band
-    yr  <- range(s$y)
-    band_lo <- yr[1] + 0.85 * diff(yr)
-    band_hi <- yr[1] + 0.95 * diff(yr)
-
-    ggplot(d, aes(x, y)) +
-      annotate("rect",
-               xmin=-Inf, xmax=Inf,
-               ymin=band_lo, ymax=band_hi,
-               fill="grey80", alpha=0.4) +
-      annotate("text", x=min(d$x)+0.01*diff(range(d$x)),
-               y=mean(c(band_lo,band_hi)),
-               label="target r ∈ [0.85, 0.95]",
-               hjust=0, size=3, colour="grey50") +
-      geom_point(colour="#2c6e8a", alpha=0.35, size=1.8) +
-      geom_smooth(method="lm", se=TRUE,
-                  colour="#c0392b", fill="#e74c3c",
-                  alpha=0.12, linetype="dashed", linewidth=0.8) +
-      labs(x = ifelse(input$s3_scale < 0.5, "Δ Size (absolute mix)", "% Δ Size (pct mix)"),
-           y = ifelse(input$s3_scale < 0.5, "Δ Strength (absolute mix)", "% Δ Strength (pct mix)"),
-           title = sprintf("Observed r = %.2f", r)) +
-      theme_minimal(base_size=13) +
-      theme(plot.title=element_text(face="bold",colour="#1a1a1a"))
-  })
-
-  output$r3_obs     <- renderText({ sprintf("%.2f", cor(sim3()$x, sim3()$y)) })
-  output$r3_causal  <- renderText({ sprintf("%.0f%%", 100 * sim3()$causal_frac) })
-  output$r3_confound <- renderText({ sprintf("%.0f%%", 100 * sim3()$confound_frac) })
-
-  output$target_msg <- renderUI({
-    r <- cor(sim3()$x, sim3()$y)
-    in_target <- r >= 0.85 & r <= 0.95
-    div(id="target_msg",
-        style=paste0("background:", if(in_target) "#d5f5e3" else "#fdecea",
-                     ";color:", if(in_target) "#1e8449" else "#922b21", ";"),
-        if(in_target) "✓ In target zone" else "✗ Outside target"
-    )
-  })
-}
-
-shinyApp(ui, server)
-```
-
-> You should find it easy to achieve r > 0.85 even with the direct effect at
-> zero, by increasing the common-cause coefficient and switching to percentage
-> scaling. Conversely, a substantial direct effect can yield r ≈ 0.3 if baseline
-> variability is high and you measure absolute changes in a multiplicative world.
-> **The same number can arise from very different data-generating processes.**
-
----
-
-## What Would Actually Help?
-
-To answer whether muscle size *causally* affects strength, we need one of the
-following:
-
-**1. Experimental variation in size independent of training load.** If you could
-randomly assign participants to gain different amounts of muscle (via BFR, very
-different rep ranges equated for effort, or pharmacological aids) while holding
-training volume and motor learning constant, you could estimate the causal
-effect. Some designs come close, but unmeasured confounders remain.
-
-**2. A formal causal mediation analysis** — which attempts to decompose the
-total effect of training into the portion that runs *through* muscle growth and
-the portion that bypasses it (neural adaptations, etc.).
-
-Crucially, however, even causal mediation analysis makes strong assumptions that
-are unlikely to hold perfectly. **Part II of this series** will dig into the
-mediation framework, and **Part III** will show exactly where those assumptions
-break — and what happens to our estimates when they do.
-
----
-
-## Summary
-
-| Problem | Mechanism | Fix |
-|---|---|---|
-| Confounding | Training drives both size and strength | Randomise size *independently* of training |
-| Collider bias | Selecting on a common effect of both | Avoid conditioning on downstream variables |
-| Scale artefact | Absolute vs. % change in add./mult. world | Pre-register scale; sensitivity across both |
-| Identification | Many causal worlds → same r | Need causal assumptions, not just data |
-
-Correlations between hypertrophy and strength gains arise from at least three
-structural mechanisms, any of which can produce arbitrarily high observed
-correlations. No correlation statistic — Pearson, repeated-measures, or
-otherwise — can distinguish between them without additional assumptions about
-the causal graph.
-
-Beyond causal structure, the scale of measurement interacts with the
-data-generating process to produce correlations that reflect the researcher's
-analytic choices as much as the underlying biology.
-
-The conclusion is not that muscle size does not cause strength — it clearly
-contributes. The conclusion is that the correlation coefficient is a blunt,
-causally agnostic tool that cannot tell us how much it contributes, under what
-conditions, or for whom. For that, we need a different framework.
-
-*That is where we are going next.*
-
----
-
-*Simulations are stochastic; resample to build intuition across runs. All data
-are synthetic.*
