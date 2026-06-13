@@ -57,7 +57,7 @@ That question is causal. Correlations are not. This is not a philosophical disti
 > tells you something about the likelihood of the other. A correlation 
 > coefficient measures this. It says nothing about why.
 
-Every systematic association between muscle size ($M$) and strength ($S$) traces back to one of three causal structures — or, in small samples, to chance alone @CausalInferenceWhat. We can represent these structures with **directed acyclic graphs (DAGs)**, where an arrow from $A$ to $B$ means "$A$ is a cause of $B$." No arrow means no direct causal relationship. What makes DAGs useful is that they let us read off, just from the diagram, which variables we would expect to be associated — and why. Below we walk through each scenario in turn.
+Every systematic association between muscle size ($M$) and strength ($S$) traces back to one of three causal structures — or, in small samples, to chance alone @hernanCausalInferenceWhat2026. We can represent these structures with **directed acyclic graphs (DAGs)**, where an arrow from $A$ to $B$ means "$A$ is a cause of $B$." No arrow means no direct causal relationship. What makes DAGs useful is that they let us read off, just from the diagram, which variables we would expect to be associated — and why. Below we walk through each scenario in turn.
 
 ### Reason 1 — Direct Causation
 
