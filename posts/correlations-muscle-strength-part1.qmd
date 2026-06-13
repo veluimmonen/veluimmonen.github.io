@@ -61,34 +61,27 @@ Every systematic association between muscle size ($M$) and strength ($S$) traces
 
 ```{=html}
 <div class="dag-figure">
-<svg viewBox="0 0 660 175" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="d1a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0,8 3,0 6" class="dag-arr-fill"/>
     </marker>
-    <marker id="d1b" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0,8 3,0 6" class="dag-spu-fill"/>
-    </marker>
   </defs>
-  <rect x="20" y="44" width="148" height="52" rx="6" class="dag-node"/>
-  <text x="94" y="64" text-anchor="middle" class="dag-lbl-cat">TRAINING</text>
-  <text x="94" y="83" text-anchor="middle" class="dag-lbl-var">T</text>
-  <rect x="256" y="44" width="148" height="52" rx="6" class="dag-node"/>
-  <text x="330" y="63" text-anchor="middle" class="dag-lbl-cat">MUSCLE SIZE</text>
-  <text x="330" y="83" text-anchor="middle" class="dag-lbl-var">M</text>
-  <rect x="492" y="44" width="148" height="52" rx="6" class="dag-node"/>
-  <text x="566" y="64" text-anchor="middle" class="dag-lbl-cat">STRENGTH</text>
-  <text x="566" y="83" text-anchor="middle" class="dag-lbl-var">S</text>
-  <line x1="169" y1="70" x2="254" y2="70" class="dag-arrow" marker-end="url(#d1a)"/>
-  <line x1="405" y1="70" x2="490" y2="70" class="dag-arrow" marker-end="url(#d1a)"/>
-  <path d="M94,96 C94,148 566,148 566,96" class="dag-spurious" marker-end="url(#d1b)"/>
-  <text x="330" y="162" text-anchor="middle" class="dag-lbl-note">NEURAL ADAPTATION</text>
+  <rect x="20" y="34" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="94" y="54" text-anchor="middle" class="dag-lbl-cat">MUSCLE SIZE</text>
+  <text x="94" y="74" text-anchor="middle" class="dag-lbl-var">M</text>
+  <rect x="192" y="34" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="266" y="54" text-anchor="middle" class="dag-lbl-cat">STRENGTH</text>
+  <text x="266" y="74" text-anchor="middle" class="dag-lbl-var">S</text>
+  <line x1="169" y1="60" x2="190" y2="60" class="dag-arrow" marker-end="url(#d1a)"/>
 </svg>
-<div class="dag-caption">T = Training · M = Muscle Size · S = Strength · dashed = parallel direct path</div>
+<div class="dag-caption">M = Muscle Size · S = Strength</div>
 </div>
 ```
 
-In this scenario, M and S are genuinely causally related: training causes muscle to grow, and that growth directly causes strength to increase. A correlation between $ΔM$ and $ΔS$ is telling you something real — but only that the effect *exists*. It cannot tell you how large the $M$→$S$ effect is relative to the other pathways in the DAG, such as the direct route from training to strength through neural adaptations. And because training is driving both M and S simultaneously, even this correlation overstates the isolated contribution of muscle growth.
+In this scenario, muscle growth directly causes strength to increase. This is what we would generally expect: when one variable has a causal effect on another, we should also expect the two to be associated. A correlation between $\Delta M$ and $\Delta S$ is therefore telling you something real — the two are linked because one drives the other.
+
+A helpful way to think about DAGs is to imagine the arrows as pipes through which association can flow. If two variables are connected by a pipe, they will tend to move together. In this scenario, M and S are connected by a single direct pipe — so when M goes up, S tends to go up too. The trouble, as we will see, is that pipes can carry association between variables even when neither causes the other.
 
 ### Structure 2 — Common Cause (Confounding)
 
@@ -118,7 +111,9 @@ In this scenario, M and S are genuinely causally related: training causes muscle
 </div>
 ```
 
-In this scenario, neither M nor S causes the other. Instead, training causes *both* muscle growth and strength gains through independent pathways — muscle size through hypertrophy, and strength through other pathways such as neural adaptations. Because training drives both simultaneously, $M$ and $S$ will be correlated in any dataset. But if we could somehow surgically remove the hypertrophic response while keeping everything else constant, strength gains would be entirely unchanged. **The correlation is real; the causal interpretation is wrong.**
+In this scenario, neither M nor S causes the other. Instead, both are driven by a common cause — training. Because both variables share the same upstream cause, they will tend to move together in any dataset, even without a direct connection between them.
+
+This means that if you learn someone gained a lot of muscle over a training block, you would reasonably update your expectation of their strength gains upward — not because muscle caused the strength gain, but because both are downstream of the same training stimulus. A correlation between $\Delta M$ and $\Delta S$ will appear, and it may be substantial, even when the direct effect of M on S is exactly zero.
 
 ### Structure 3 — Collider Bias (Selection)
 
@@ -153,155 +148,363 @@ In this scenario, neither M nor S causes the other. Instead, training causes *bo
 </div>
 ```
 
-In this scenario, $M$ and $S$ are causally unrelated, but both independently contribute to a third variable — say, an overall "progress score" used to identify high responders. If a study retains only participants above a certain threshold on that score, or if an analysis statistically controls for it, a spurious association between $M$ and $S$ appears in the selected sample even though  none exists in the full population. Within the selected group, those who gained less muscle must have gained more strength to make the cut — and vice versa — making the two appear negatively or positively associated purely as an artefact of how the sample was assembled.
+### Scenario 3 — Collider Bias (Selection)
+
+In this scenario, M and S are again causally unrelated — and unlike Scenario 2, they do not even share a common cause. Both independently influence a third variable: whether a participant completes the study. Someone who gained little muscle might still complete the programme because their strength progressed well enough to keep them motivated, and vice versa. Study completion is therefore a common *effect* of both M and S — a collider.
+
+Here is the key insight: in the full population, M and S are independent. Learning that someone gained a lot of muscle tells you nothing about their strength gains, because there is no pipe connecting them — the only path runs through the collider, and colliders, unlike common causes, *block* the flow of association rather than transmitting it.
+
+But the moment we restrict our analysis to completers — conditioning on the collider — that blockage disappears. Within completers, those who gained little muscle must have gained more strength to make the cut, and those who gained little strength must have gained more muscle. A spurious association between M and S appears entirely as an artefact of who ended up in the analysed sample, not because of anything happening biologically between the two variables.
 
 ---
 
 ### 🔬 Simulation 1 — Which World Are We In?
 
-Use the controls below to set the strength of each causal pathway and choose a
-world type. Notice that even with the **direct effect of size set to zero**, you
-can observe r > 0.4 in the confounding world — and an association appears from
-nothing in the collider world the moment you restrict to high-progress participants.
+The simulation below generates data from three different causal worlds. Rather 
+than letting you dial in arbitrary values, we have pre-set the parameters to 
+reflect realistic scenarios grounded in the resistance training literature. 
+Click a scenario to load it, then hit **Resample** to build intuition across 
+repeated draws from the same world.
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 580
+#| viewerHeight: 620
 
 library(shiny)
 library(ggplot2)
 
-ui <- fluidPage(
-  tags$style(HTML("
-    body { font-family: 'Helvetica Neue', sans-serif; font-size: 13px; }
-    .well { background: #f8f8f8; border: 1px solid #ddd; padding: 12px; }
-    h4 { font-size: 13px; font-weight: 700; text-transform: uppercase;
-         letter-spacing: 0.08em; color: #2c6e8a; margin-bottom: 10px; }
-    .stat-label { font-size: 11px; color: #777; text-transform: uppercase;
-                  letter-spacing: 0.1em; }
-    .stat-value { font-size: 1.4rem; font-weight: 700; color: #2c6e8a; }
-  ")),
-  fluidRow(
-    column(4,
-      wellPanel(
-        h4("World type"),
-        radioButtons("world", NULL,
-          choices = c(
-            "Direct causation"   = "direct",
-            "Confounding"        = "confound",
-            "Collider / Selection" = "collider"
-          ), selected = "direct"
-        ),
-        hr(),
-        h4("Parameters"),
-        sliderInput("trainSize", "Training → Size",
-                    min=0, max=1, value=0.7, step=0.05),
-        sliderInput("sizeStr",   "Size → Strength (direct effect)",
-                    min=0, max=1, value=0.5, step=0.05),
-        sliderInput("trainStr",  "Training → Strength (neural / direct)",
-                    min=0, max=1, value=0.4, step=0.05),
-        sliderInput("noise",     "Noise",
-                    min=0.05, max=1, value=0.4, step=0.05),
-        sliderInput("n",         "N (participants)",
-                    min=50, max=500, value=200, step=50),
-        actionButton("resample", "Resample", class="btn btn-primary btn-sm")
-      )
-    ),
-    column(8,
-      plotOutput("scatter", height="320px"),
-      fluidRow(
-        column(4, div(class="stat-label", "Observed r(ΔSize, ΔStrength)"),
-                  div(class="stat-value", textOutput("r_obs", inline=TRUE))),
-        column(4, div(class="stat-label", "Causal share of variance"),
-                  div(class="stat-value", textOutput("r_causal", inline=TRUE))),
-        column(4, div(class="stat-label", "World"),
-                  div(class="stat-value", textOutput("world_label", inline=TRUE)))
-      ),
-      hr(),
-      p(style="font-size:12px;color:#777;",
-        "Red points: selected participants (collider world only). ",
-        "Dashed line: OLS regression. Shaded band: 95% CI.")
+# ── Dark theme for ggplot ──────────────────────────────────────
+theme_dark_custom <- function() {
+  theme_minimal(base_size = 13) +
+    theme(
+      plot.background    = element_rect(fill = "#1e1e1e", colour = NA),
+      panel.background   = element_rect(fill = "#1e1e1e", colour = NA),
+      panel.grid.major   = element_line(colour = "#333333"),
+      panel.grid.minor   = element_line(colour = "#2a2a2a"),
+      axis.text          = element_text(colour = "#aaaaaa"),
+      axis.title         = element_text(colour = "#cccccc"),
+      plot.title         = element_text(colour = "#ffffff", face = "bold",
+                                        size = 14),
+      plot.subtitle      = element_text(colour = "#aaaaaa", size = 11),
+      legend.background  = element_rect(fill = "#1e1e1e", colour = NA),
+      legend.text        = element_text(colour = "#aaaaaa"),
+      legend.title       = element_text(colour = "#cccccc")
     )
+}
+
+# ── Presets ────────────────────────────────────────────────────
+presets <- list(
+  direct = list(
+    b_ts = 0.60, b_sf = 0.55, b_tf = 0.30, sig = 0.35,
+    label = "Scenario 1 — Direct causation",
+    subtitle = "Size → Strength effect is active. Training also drives strength directly, but size plays a meaningful causal role."
+  ),
+  confound = list(
+    b_ts = 0.30, b_sf = 0.00, b_tf = 0.90, sig = 0.40,
+    label = "Scenario 2 — Confounding",
+    subtitle = "Size → Strength is zero. Training drives both independently. Based on typical effect sizes in resistance training studies."
+  ),
+  collider = list(
+    b_ts = NA, b_sf = NA, b_tf = NA, sig = NA,
+    label = "Scenario 3 — Collider (Powerlifting selection)",
+    subtitle = "M and S are independent. Only athletes strong AND muscular enough to compete appear in the dataset."
   )
 )
 
-server <- function(input, output, session) {
-  set.seed(NULL)
+ui <- fluidPage(
+  tags$head(tags$style(HTML("
+    body, .container-fluid {
+      background-color: #1e1e1e !important;
+      color: #cccccc !important;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 13px;
+    }
+    .well {
+      background-color: #2a2a2a !important;
+      border: 1px solid #3a3a3a !important;
+      color: #cccccc !important;
+    }
+    h4 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #5b9ec9;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 10px;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #5b9ec9;
+    }
+    .stat-value.green { color: #4caf82; }
+    .stat-value.red   { color: #e05c5c; }
+    .preset-btn {
+      display: block;
+      width: 100%;
+      margin-bottom: 8px;
+      text-align: left;
+      background-color: #2f2f2f;
+      border: 1px solid #444;
+      color: #cccccc;
+      padding: 8px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .preset-btn:hover  { background-color: #3a3a3a; border-color: #5b9ec9; }
+    .preset-btn.active { background-color: #1a3a52; border-color: #5b9ec9;
+                         color: #ffffff; }
+    .scenario-subtitle {
+      font-size: 11px;
+      color: #888;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+    hr { border-color: #333; }
+    label { color: #aaaaaa !important; }
+    .irs--shiny .irs-bar      { background: #5b9ec9; border-color: #5b9ec9; }
+    .irs--shiny .irs-handle   { border-color: #5b9ec9; }
+    .irs--shiny .irs-from,
+    .irs--shiny .irs-to,
+    .irs--shiny .irs-single   { background: #5b9ec9; }
+    .irs--shiny .irs-line     { background: #444; border-color: #444; }
+    .irs--shiny .irs-grid-text { color: #666; }
+    .btn-primary {
+      background-color: #5b9ec9 !important;
+      border-color: #5b9ec9 !important;
+      color: #fff !important;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .btn-primary:hover { background-color: #4a8ab5 !important; }
+    .note-text {
+      font-size: 11px;
+      color: #666;
+      margin-top: 8px;
+    }
+  "))),
 
+  fluidRow(
+    # ── Left panel ──────────────────────────────────────────────
+    column(4,
+      wellPanel(
+        h4("Choose a scenario"),
+        tags$button("Scenario 1 — Direct causation",
+                    id = "btn_direct",
+                    class = "preset-btn active",
+                    onclick = "Shiny.setInputValue('preset', 'direct',
+                               {priority: 'event'})"),
+        tags$button("Scenario 2 — Confounding",
+                    id = "btn_confound",
+                    class = "preset-btn",
+                    onclick = "Shiny.setInputValue('preset', 'confound',
+                               {priority: 'event'})"),
+        tags$button("Scenario 3 — Collider / Selection",
+                    id = "btn_collider",
+                    class = "preset-btn",
+                    onclick = "Shiny.setInputValue('preset', 'collider',
+                               {priority: 'event'})"),
+        hr(),
+        h4("Parameters"),
+        uiOutput("scenario_subtitle"),
+        sliderInput("b_ts", "Training → Size",
+                    min=0, max=1, value=0.60, step=0.05),
+        sliderInput("b_sf", "Size → Strength",
+                    min=0, max=1, value=0.55, step=0.05),
+        sliderInput("b_tf", "Training → Strength (direct)",
+                    min=0, max=1, value=0.30, step=0.05),
+        sliderInput("sig",  "Noise",
+                    min=0.05, max=1, value=0.35, step=0.05),
+        sliderInput("n",    "N (participants)",
+                    min=50, max=600, value=200, step=50),
+        actionButton("resample", "Resample",
+                     class = "btn btn-primary btn-sm")
+      )
+    ),
+
+    # ── Right panel ─────────────────────────────────────────────
+    column(8,
+      plotOutput("scatter", height = "340px"),
+      fluidRow(
+        column(4,
+          div(class="stat-label", "Observed r"),
+          div(class="stat-value", textOutput("r_obs", inline=TRUE))
+        ),
+        column(4,
+          div(class="stat-label", "Causal share of variance"),
+          uiOutput("causal_share")
+        ),
+        column(4,
+          div(class="stat-label", "Active scenario"),
+          div(class="stat-value", style="font-size:1rem",
+              textOutput("world_label", inline=TRUE))
+        )
+      ),
+      div(class="note-text",
+        "Collider world: grey points = full population (M and S independent); ",
+        "red points = athletes who made it into the dataset. ",
+        "Regression line fitted to red points only."
+      )
+    )
+  ),
+
+  # ── Button highlight JS ──────────────────────────────────────
+  tags$script(HTML("
+    Shiny.addCustomMessageHandler('highlight_btn', function(id) {
+      ['btn_direct','btn_confound','btn_collider'].forEach(function(b) {
+        document.getElementById(b).classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    });
+  "))
+)
+
+server <- function(input, output, session) {
+
+  current_world <- reactiveVal("direct")
+
+  # Load preset when button clicked
+  observeEvent(input$preset, {
+    p <- presets[[input$preset]]
+    current_world(input$preset)
+    session$sendCustomMessage("highlight_btn", paste0("btn_", input$preset))
+
+    if (input$preset != "collider") {
+      updateSliderInput(session, "b_ts", value = p$b_ts)
+      updateSliderInput(session, "b_sf", value = p$b_sf)
+      updateSliderInput(session, "b_tf", value = p$b_tf)
+      updateSliderInput(session, "sig",  value = p$sig)
+    }
+  })
+
+  output$scenario_subtitle <- renderUI({
+    p <- presets[[current_world()]]
+    div(class="scenario-subtitle", p$subtitle)
+  })
+
+  # ── Data generation ──────────────────────────────────────────
   dat <- reactive({
     input$resample
-    n   <- input$n
-    b_ts <- input$trainSize
-    b_sf <- input$sizeStr
-    b_tf <- input$trainStr
-    sig  <- input$noise
-    training <- rnorm(n)
+    input$preset
+    n    <- input$n
+    b_ts <- input$b_ts
+    b_sf <- input$b_sf
+    b_tf <- input$b_tf
+    sig  <- input$sig
+    world <- current_world()
 
-    if (input$world == "direct") {
-      dS <- b_ts * training + sig * rnorm(n)
-      dF <- b_sf * dS + b_tf * training + sig * rnorm(n)
+    if (world == "direct") {
+      training <- rnorm(n)
+      dM <- b_ts * training + sig * rnorm(n)
+      dS <- b_sf * dM + b_tf * training + sig * rnorm(n)
       selected <- rep(TRUE, n)
-    } else if (input$world == "confound") {
-      dS <- b_ts * training + sig * rnorm(n)
-      dF <- b_tf * training + sig * rnorm(n)   # no size → strength
+
+    } else if (world == "confound") {
+      training <- rnorm(n)
+      dM <- b_ts * training + sig * rnorm(n)
+      dS <- b_tf * training + sig * rnorm(n)   # M → S path is zero
       selected <- rep(TRUE, n)
+
     } else {
-    # collider: M and S are causally independent
-    # both happen to influence a "progress score" (the collider)
+      # Collider: powerlifting selection
+      # M and S are generated independently
+      # Both contribute to "making it" as a competitive powerlifter
+      dM <- rnorm(n)
       dS <- rnorm(n)
-      dF <- rnorm(n)
-      score     <- dS + dF + 0.3 * rnorm(n)  # collider with small noise
-      threshold <- quantile(score, 0.40)
-      selected  <- score >= threshold
-}
-    data.frame(dS=dS, dF=dF, selected=selected)
+      # Selection score: high muscle AND high strength → compete
+      logit_select <- 1.2 * dM + 1.2 * dS - 0.5 + 0.4 * rnorm(n)
+      prob_select  <- 1 / (1 + exp(-logit_select))
+      selected     <- runif(n) < prob_select
+    }
+
+    data.frame(dM=dM, dS=dS, selected=selected)
   })
 
+  # ── Plot ─────────────────────────────────────────────────────
   output$scatter <- renderPlot({
-    d <- dat()
-    d_plot <- if (input$world == "collider") d[d$selected, ] else d
+    d     <- dat()
+    world <- current_world()
 
-    r_val <- cor(d_plot$dS, d_plot$dF)
+    if (world == "collider") {
+      d_sel   <- d[d$selected,  ]
+      d_unsel <- d[!d$selected, ]
+      r_val   <- if (nrow(d_sel) > 2) cor(d_sel$dM, d_sel$dS) else NA
 
-    ggplot(d_plot, aes(x=dS, y=dF)) +
-      geom_point(
-        aes(colour = if(input$world=="collider") "Selected" else "All"),
-        alpha=0.45, size=2
-      ) +
-      geom_smooth(method="lm", se=TRUE, colour="#c0392b",
-                  fill="#e74c3c", alpha=0.15, linetype="dashed", linewidth=0.8) +
-      scale_colour_manual(values=c("All"="#2c6e8a","Selected"="#c0392b"),
-                          guide="none") +
-      labs(
-        x = "Δ Muscle size", y = "Δ Strength",
-        title = sprintf("Observed r = %.2f", r_val)
-      ) +
-      theme_minimal(base_size=13) +
-      theme(plot.title = element_text(face="bold", colour="#1a1a1a"))
-  })
+      ggplot() +
+        geom_point(data=d_unsel, aes(x=dM, y=dS),
+                   colour="#555555", alpha=0.25, size=1.5) +
+        geom_point(data=d_sel, aes(x=dM, y=dS),
+                   colour="#e05c5c", alpha=0.55, size=2) +
+        geom_smooth(data=d_sel, aes(x=dM, y=dS),
+                    method="lm", se=TRUE,
+                    colour="#e05c5c", fill="#e05c5c",
+                    alpha=0.15, linetype="dashed", linewidth=0.9) +
+        labs(
+          x = "Muscle size (M)",
+          y = "Strength (S)",
+          title = sprintf("Observed r = %.2f  (selected only)",
+                          ifelse(is.na(r_val), NA, r_val)),
+          subtitle = sprintf("N total = %d  |  N selected (competing) = %d  |  N excluded = %d",
+                             nrow(d), sum(d$selected), sum(!d$selected))
+        ) +
+        theme_dark_custom()
 
-  output$r_obs <- renderText({
-    d <- dat()
-    d_plot <- if (input$world == "collider") d[d$selected, ] else d
-    sprintf("%.2f", cor(d_plot$dS, d_plot$dF))
-  })
-
-  output$r_causal <- renderText({
-    if (input$world == "direct") {
-      total <- input$sizeStr^2 + input$trainStr^2 + input$noise^2 + 1e-4
-      sprintf("%.0f%%", 100 * input$sizeStr^2 / total)
-    } else if (input$world == "confound") {
-      "0% (none)"
     } else {
-      "Undefined"
+      r_val <- cor(d$dM, d$dS)
+      ggplot(d, aes(x=dM, y=dS)) +
+        geom_point(colour="#5b9ec9", alpha=0.40, size=1.8) +
+        geom_smooth(method="lm", se=TRUE,
+                    colour="#e05c5c", fill="#e05c5c",
+                    alpha=0.15, linetype="dashed", linewidth=0.9) +
+        labs(
+          x = "Δ Muscle size (M)",
+          y = "Δ Strength (S)",
+          title = sprintf("Observed r = %.2f", r_val),
+          subtitle = sprintf("N = %d", nrow(d))
+        ) +
+        theme_dark_custom()
+    }
+  }, bg="#1e1e1e")
+
+  # ── Stats ─────────────────────────────────────────────────────
+  output$r_obs <- renderText({
+    d     <- dat()
+    world <- current_world()
+    d_plot <- if (world == "collider") d[d$selected, ] else d
+    if (nrow(d_plot) < 3) return("—")
+    sprintf("%.2f", cor(d_plot$dM, d_plot$dS))
+  })
+
+  output$causal_share <- renderUI({
+    world <- current_world()
+    if (world == "direct") {
+      total <- input$b_sf^2 + input$b_tf^2 + input$sig^2 + 1e-4
+      pct   <- round(100 * input$b_sf^2 / total)
+      div(class="stat-value green", paste0(pct, "%"))
+    } else if (world == "confound") {
+      div(class="stat-value red", "0%")
+    } else {
+      div(class="stat-value", style="color:#888;font-size:1rem",
+          "0% — M and S are independent")
     }
   })
 
   output$world_label <- renderText({
-    switch(input$world,
-      direct   = "Direct cause",
+    switch(current_world(),
+      direct   = "Direct causation",
       confound = "Confounding",
-      collider = "Collider"
+      collider = "Collider / Selection"
     )
   })
 }
@@ -309,11 +512,21 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-> **Key insight:** In the confounding world, set *Size → Strength* to **0** and
-> watch the correlation remain comfortably above r = 0.3–0.5, driven entirely
-> by training as a shared cause. In the collider world, Size and Strength are
-> generated *independently* — yet restricting to the top 60% of progress scores
-> conjures an association from nothing.
+::: {.callout-tip}
+## What to look for
+
+- **Scenario 1:** The causal share of variance tells you what fraction of the 
+  observed correlation is genuinely due to M causing S. Even here, the 
+  correlation overstates the isolated causal effect because training drives 
+  both simultaneously.
+- **Scenario 2:** Set *Size → Strength* is already at zero — yet watch a 
+  meaningful correlation appear, driven entirely by training as a shared cause. 
+  This mirrors the logic behind Ahtiainen et al. (2016).
+- **Scenario 3:** Grey points are the full population — M and S are completely 
+  independent. Red points are athletes who made it into a competitive powerlifting 
+  dataset. The regression line is fitted to red points only. A spurious 
+  association emerges purely from who got selected.
+:::
 
 ---
 
