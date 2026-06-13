@@ -4,10 +4,14 @@ subtitle: "Part I of III — Associations and Their Discontents"
 date: "2026-06-13"
 categories: [causal inference, muscle physiology, statistics, simulation]
 description: >
-  A recent analysis found r = 0.92 between hypertrophy and strength gains.
-  But high correlations have many parents — and causation is only one of them.
-  This article uses interactive R simulations to show exactly how associations
-  arise, and why they systematically mislead.
+  Correlations between changes in muscle size and strength vary wildly across
+  studies — anywhere from near zero to above 0.9. But this variability tells
+  us less about biology than we might think: the same training programme, run
+  twice, can produce almost any correlation depending on who you recruit, how
+  you measure change, and which causal forces happen to dominate in your sample.
+  This article uses interactive simulations to show the three structural reasons
+  associations arise — and why none of them, on their own, can tell us whether
+  size actually causes strength.
 format:
   html:
     toc: true
@@ -22,25 +26,28 @@ filters:
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-Greg Nuckols recently wrote a careful analysis of whether hypertrophy and strength
-gains are more strongly correlated than we previously thought. His conclusion —
-that within-person repeated-measures correlations of r ≈ 0.90 look impressive,
-but the between-person picture is far murkier — is exactly right. But I think
-the deeper problem is not *which* correlation coefficient we pick. It is that
-**no correlation coefficient, however cleverly estimated, can answer the causal
-question** we actually care about: does gaining muscle make you stronger?
+::: {.callout-tip}
+## Key points
 
-That question is causal. Correlations are not. The gap between those two things
-is not a pedantic statistical quibble — it produces completely different answers
-in practice, and this article will show you why, using interactive simulations
-you can run right here in your browser (no server required).
+- Correlations between changes in muscle size and strength vary from near zero 
+  to above 0.9 across studies — and that variability is itself the problem, 
+  not the answer.
+- A high correlation can emerge even when size has no causal effect on strength 
+  whatsoever, through at least three distinct structural mechanisms.
+- Even when the causal effect is real, the correlation you observe depends 
+  heavily on choices made before the analysis — who you recruit, how you measure 
+  change, and what scale you report it on.
+- Establishing that size *causes* strength requires a different framework 
+  entirely, which we introduce in Part II.
+:::
 
-We will work through three mechanisms that produce associations between variables
-that have nothing to do with one causing the other. Then we will add a second
-layer of trouble: even when we correctly identify that A causes B, our estimate
-of the effect's size will depend entirely on whether the underlying biological
-process is additive or multiplicative — and which scale (absolute vs. percentage
-change) we happen to look at.
+You have probably heard that correlation is not causation. It is one of those phrases that gets repeated so often it has almost lost its meaning — a disclaimer people attach to findings before moving on to interpret them causally anyway. But if everyone knows this, why do we keep reaching for correlations when we want to understand whether muscle growth drives strength gains?
+
+I think the honest answer is that we are trying to answer a causal question and do not always know how to do it properly. Correlations are easy to compute, easy to report, and — crucially — easy to misread as evidence that one thing is causing another. The literature on muscle size and strength is a good example: observed correlations between changes in the two vary anywhere from near zero to above 0.9 across studies, and that variability itself is rarely treated as the puzzle it should be.
+
+The deeper problem is not which correlation we pick, or how cleverly we estimate it. It is that no correlation, however well-constructed, can answer the question we actually care about: does gaining muscle make you stronger?
+
+That question is causal. Correlations are not. This is not a philosophical distinction — it has real consequences for how we interpret training research and design interventions. In this article, we use interactive simulations to make those consequences concrete. We first show how a strong association between size and strength changes can emerge even when one has nothing to do with the other. We then show how, even in a world where size genuinely does cause strength, the number we report can change dramatically depending on choices that have nothing to do with the underlying biology.
 
 ::: {.callout-note}
 ## How to read this article
@@ -62,13 +69,10 @@ an arrow means no direct effect (conditional on everything else in the graph).
 
 ### Structure 1 — Direct Causation
 
-```{mermaid}
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px', 'background': '#0a0a0e', 'mainBkg': '#0a0a0e', 'nodeBorder': '#06b6d4', 'clusterBkg': '#0f0f15', 'titleColor': '#94a3b8', 'edgeColor': '#06b6d4', 'labelBackground': '#0f0f15', 'textColor': '#e2e8f0', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}}}%%
-flowchart LR
-    T[Training] --> S["Size (S)"]
-    T --> F["Strength (F)"]
-    S --> F
-    T -.->|"via neural\nadaptation"| F
+```
+Training ──► Size (S) ──► Strength (F)
+                 ↑
+          (also Training ──► F directly, via neural adaptation)
 ```
 
 Training causes muscle to grow, and that growth directly causes strength to
@@ -77,12 +81,12 @@ only that the effect *exists*, not how large it is relative to all other pathway
 
 ### Structure 2 — Common Cause (Confounding)
 
-```{mermaid}
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px', 'background': '#0a0a0e', 'mainBkg': '#0a0a0e', 'nodeBorder': '#06b6d4', 'clusterBkg': '#0f0f15', 'titleColor': '#94a3b8', 'edgeColor': '#06b6d4', 'labelBackground': '#0f0f15', 'textColor': '#e2e8f0', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}}}%%
-flowchart TD
-    T[Training] --> S["Size (S)"]
-    T --> F["Strength (F)"]
-    S -. "spurious\nassociation" .-> F
+```
+         Training
+        ↙         ↘
+   Size (S)     Strength (F)
+        ↘         ↙
+     (spurious association)
 ```
 
 Training causes *both* muscle growth and strength gains independently — through
@@ -93,12 +97,10 @@ interpretation is wrong.**
 
 ### Structure 3 — Collider Bias (Selection)
 
-```{mermaid}
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px', 'background': '#0a0a0e', 'mainBkg': '#0a0a0e', 'nodeBorder': '#06b6d4', 'clusterBkg': '#0f0f15', 'titleColor': '#94a3b8', 'edgeColor': '#06b6d4', 'labelBackground': '#0f0f15', 'textColor': '#e2e8f0', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}}}%%
-flowchart LR
-    S["Size (S)"] --> P["Progress score\n(collider)"]
-    F["Strength (F)"] --> P
-    S -. "spurious path\nopens when\nconditioning on P" .-> F
+```
+Size (S) ──►  Progress score  ◄── Strength (F)
+              (conditioning here…)
+              (…opens a spurious path between S and F)
 ```
 
 Suppose a study retains only "good responders" — participants above a threshold
@@ -686,9 +688,3 @@ conditions, or for whom. For that, we need a different framework.
 
 *Simulations are stochastic; resample to build intuition across runs. All data
 are synthetic.*
-
-## Session info
-
-```{r session-info}
-sessionInfo()
-```
