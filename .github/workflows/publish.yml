@@ -30,7 +30,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          install.packages(c("rmarkdown", "knitr", "shiny", "ggplot2", "patchwork"))
+          install.packages(c("rmarkdown", "knitr", "shinylive", "shiny", "ggplot2", "patchwork"))
         shell: Rscript {0}
 
       - name: Install shinylive extension
