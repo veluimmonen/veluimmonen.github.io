@@ -2,7 +2,6 @@
 title: "Why Correlations Can't Tell Us Whether Muscle Size Causes Strength"
 subtitle: "Part I of III — Associations and Their Discontents"
 date: "2026-06-13"
-bibliography: bibliography.bib
 categories: [causal inference, muscle physiology, statistics, simulation]
 description: >
   Correlations between changes in muscle size and strength vary wildly across
