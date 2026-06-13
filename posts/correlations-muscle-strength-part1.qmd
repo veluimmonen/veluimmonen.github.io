@@ -53,71 +53,107 @@ That question is causal. Correlations are not. This is not a philosophical disti
 
 ## Part I — Three Ways Associations Arise
 
-Every systematic association between muscle size (M) and strength (S) traces 
-back to one of three causal structures — or, in small samples, to chance alone. 
-We can represent these structures with **directed acyclic graphs (DAGs)**, where 
-an arrow from A to B means "A is a cause of B." No arrow means no direct causal 
-relationship. What makes DAGs useful is that they let us read off, just from the 
-diagram, which variables we would expect to be associated — and why.
+Association: two variables are associated if information about one tells you something about the likelihood of the other (statistical correlation)
+
+Every systematic association between muscle size ($M$) and strength ($S$) traces back to one of three causal structures — or, in small samples, to chance alone. We can represent these structures with **directed acyclic graphs (DAGs)**, where an arrow from $A$ to $B$ means "$A$ is a cause of $B$." No arrow means no direct causal relationship. What makes DAGs useful is that they let us read off, just from the diagram, which variables we would expect to be associated — and why. Below we walk through each scenario in turn.
 
 ### Structure 1 — Direct Causation
 
-```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}, 'flowchart': {'useMaxWidth': true, 'padding': 20}}}%%
-flowchart LR
-    T["Training"] --> S["Size (S)"]
-    S --> F["Strength (F)"]
-    T -->|"via neural adaptation"| F
+```{=html}
+<div class="dag-figure">
+<svg viewBox="0 0 660 175" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="d1a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-arr-fill"/>
+    </marker>
+    <marker id="d1b" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-spu-fill"/>
+    </marker>
+  </defs>
+  <rect x="20" y="44" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="94" y="64" text-anchor="middle" class="dag-lbl-cat">TRAINING</text>
+  <text x="94" y="83" text-anchor="middle" class="dag-lbl-var">T</text>
+  <rect x="256" y="44" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="330" y="63" text-anchor="middle" class="dag-lbl-cat">MUSCLE SIZE</text>
+  <text x="330" y="83" text-anchor="middle" class="dag-lbl-var">M</text>
+  <rect x="492" y="44" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="566" y="64" text-anchor="middle" class="dag-lbl-cat">STRENGTH</text>
+  <text x="566" y="83" text-anchor="middle" class="dag-lbl-var">S</text>
+  <line x1="169" y1="70" x2="254" y2="70" class="dag-arrow" marker-end="url(#d1a)"/>
+  <line x1="405" y1="70" x2="490" y2="70" class="dag-arrow" marker-end="url(#d1a)"/>
+  <path d="M94,96 C94,148 566,148 566,96" class="dag-spurious" marker-end="url(#d1b)"/>
+  <text x="330" y="162" text-anchor="middle" class="dag-lbl-note">NEURAL ADAPTATION</text>
+</svg>
+<div class="dag-caption">T = Training · M = Muscle Size · S = Strength · dashed = parallel direct path</div>
+</div>
 ```
 
-Training causes muscle to grow, and that growth directly causes strength to
-increase. A correlation between ΔS and ΔF is telling you something real — but
-only that the effect *exists*, not how large it is relative to all other pathways.
+In this scenario, M and S are genuinely causally related: training causes muscle to grow, and that growth directly causes strength to increase. A correlation between $ΔM$ and $ΔS$ is telling you something real — but only that the effect *exists*. It cannot tell you how large the $M$→$S$ effect is relative to the other pathways in the DAG, such as the direct route from training to strength through neural adaptations. And because training is driving both M and S simultaneously, even this correlation overstates the isolated contribution of muscle growth.
 
 ### Structure 2 — Common Cause (Confounding)
 
-```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}, 'flowchart': {'useMaxWidth': true, 'padding': 20}}}%%
-flowchart TD
-    T["Training"] --> S["Size (S)"]
-    T --> F["Strength (F)"]
-    S -. "spurious association" .-> F
+```{=html}
+<div class="dag-figure">
+<svg viewBox="0 0 660 238" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="d2a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-arr-fill"/>
+    </marker>
+  </defs>
+  <rect x="255" y="20" width="150" height="52" rx="6" class="dag-node"/>
+  <text x="330" y="40" text-anchor="middle" class="dag-lbl-cat">TRAINING</text>
+  <text x="330" y="59" text-anchor="middle" class="dag-lbl-var">T</text>
+  <rect x="50" y="158" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="124" y="177" text-anchor="middle" class="dag-lbl-cat">MUSCLE SIZE</text>
+  <text x="124" y="196" text-anchor="middle" class="dag-lbl-var">M</text>
+  <rect x="462" y="158" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="536" y="177" text-anchor="middle" class="dag-lbl-cat">STRENGTH</text>
+  <text x="536" y="196" text-anchor="middle" class="dag-lbl-var">S</text>
+  <line x1="292" y1="72" x2="170" y2="156" class="dag-arrow" marker-end="url(#d2a)"/>
+  <line x1="368" y1="72" x2="490" y2="156" class="dag-arrow" marker-end="url(#d2a)"/>
+  <path d="M198,184 Q330,214 462,184" class="dag-spurious"/>
+  <text x="330" y="226" text-anchor="middle" class="dag-lbl-note">SPURIOUS ASSOCIATION</text>
+</svg>
+<div class="dag-caption">T drives both M and S independently — their correlation carries no causal meaning</div>
+</div>
 ```
 
-Training causes *both* muscle growth and strength gains independently — through
-neural adaptations, tendon stiffness changes, motor learning. Size and strength
-will be correlated in any dataset, but removing the muscle growth (magically)
-would not reduce strength gains at all. **The correlation is real; the causal
-interpretation is wrong.**
+In this scenario, neither M nor S causes the other. Instead, training causes *both* muscle growth and strength gains through independent pathways — muscle size through hypertrophy, and strength through other pathways such as neural adaptations. Because training drives both simultaneously, $M$ and $S$ will be correlated in any dataset. But if we could somehow surgically remove the hypertrophic response while keeping everything else constant, strength gains would be entirely unchanged. **The correlation is real; the causal interpretation is wrong.**
 
 ### Structure 3 — Collider Bias (Selection)
 
-```{mermaid}
-%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}, 'flowchart': {'useMaxWidth': true, 'padding': 20}}}%%
-flowchart LR
-    S["Size (S)"] --> P["Progress Score\n(collider)"]
-    F["Strength (F)"] --> P
-    S -. "spurious path opens\nwhen conditioning on P" .-> F
+```{=html}
+<div class="dag-figure">
+<svg viewBox="0 0 660 185" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="d3a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-arr-fill"/>
+    </marker>
+    <marker id="d3b" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-spu-fill"/>
+    </marker>
+  </defs>
+  <rect x="20" y="46" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="94" y="66" text-anchor="middle" class="dag-lbl-cat">MUSCLE SIZE</text>
+  <text x="94" y="85" text-anchor="middle" class="dag-lbl-var">M</text>
+  <rect x="248" y="40" width="164" height="64" rx="9" class="dag-node-ring"/>
+  <text x="330" y="34" text-anchor="middle" class="dag-lbl-cond">CONDITIONED ON</text>
+  <rect x="256" y="46" width="148" height="52" rx="6" class="dag-node-alt"/>
+  <text x="330" y="64" text-anchor="middle" class="dag-lbl-cat">PROGRESS SCORE</text>
+  <text x="330" y="85" text-anchor="middle" class="dag-lbl-var">P</text>
+  <rect x="492" y="46" width="148" height="52" rx="6" class="dag-node"/>
+  <text x="566" y="66" text-anchor="middle" class="dag-lbl-cat">STRENGTH</text>
+  <text x="566" y="85" text-anchor="middle" class="dag-lbl-var">S</text>
+  <line x1="169" y1="72" x2="254" y2="72" class="dag-arrow" marker-end="url(#d3a)"/>
+  <line x1="492" y1="72" x2="406" y2="72" class="dag-arrow" marker-end="url(#d3a)"/>
+  <path d="M94,98 C94,150 566,150 566,98" class="dag-spurious" marker-end="url(#d3b)"/>
+  <text x="330" y="165" text-anchor="middle" class="dag-lbl-note">SPURIOUS PATH · OPENS WHEN CONDITIONING ON P</text>
+</svg>
+<div class="dag-caption">P is a collider — both M and S cause P, so conditioning on P opens a spurious path between them</div>
+</div>
 ```
 
-Suppose a study retains only "good responders" — participants above a threshold
-on an overall progress metric that combines size and strength gains. Both
-contribute to that selection criterion. Conditioning on it — or restricting
-analysis to participants above the threshold — **opens a spurious path** between
-Size and Strength even if they have zero direct causal relationship. Within the
-selected group, those who grew more muscle appear to have gained more strength,
-simply because both had to be elevated to survive selection.
-
-::: {.callout-warning}
-## The within-person correlation and confounding
-
-The within-person repeated-measures correlation celebrated by Marques et al.
-(2025) is actually *more* susceptible to the confounding story, not less. Within
-each person, muscle size and neural/tendon adaptations are both driven by the
-same training stimulus, on the same timeline, within the same body. A strong
-within-person track of both variables rising together is exactly what you would
-predict from the confounding DAG. It does not require direct causation.
-:::
+In this scenario, $M$ and $S$ are causally unrelated, but both independently contribute to a third variable — say, an overall "progress score" used to identify high responders. If a study retains only participants above a certain threshold on that score, or if an analysis statistically controls for it, a spurious association between $M$ and $S$ appears in the selected sample even though  none exists in the full population. Within the selected group, those who gained less muscle must have gained more strength to make the cut — and vice versa — making the two appear negatively or positively associated purely as an artefact of how the sample was assembled.
 
 ---
 
@@ -210,13 +246,14 @@ server <- function(input, output, session) {
       dF <- b_tf * training + sig * rnorm(n)   # no size → strength
       selected <- rep(TRUE, n)
     } else {
-      # collider: size and strength from independent causes
-      dS <- b_ts * rnorm(n) + sig * rnorm(n)
-      dF <- b_tf * rnorm(n) + sig * rnorm(n)
-      score    <- dS + dF
+    # collider: M and S are causally independent
+    # both happen to influence a "progress score" (the collider)
+      dS <- rnorm(n)
+      dF <- rnorm(n)
+      score     <- dS + dF + 0.3 * rnorm(n)  # collider with small noise
       threshold <- quantile(score, 0.40)
-      selected <- score >= threshold
-    }
+      selected  <- score >= threshold
+}
     data.frame(dS=dS, dF=dF, selected=selected)
   })
 
