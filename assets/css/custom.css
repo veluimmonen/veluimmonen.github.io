@@ -608,8 +608,15 @@ pre.mermaid,
   border-radius: 10px !important;
   padding: 2rem 1.5rem !important;
   margin: 1.75rem 0 !important;
-  display: flex !important;
-  justify-content: center !important;
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.mermaid svg {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
 }
 
 .mermaid .node rect,

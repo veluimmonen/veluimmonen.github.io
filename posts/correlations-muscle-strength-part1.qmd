@@ -49,30 +49,25 @@ The deeper problem is not which correlation we pick, or how cleverly we estimate
 
 That question is causal. Correlations are not. This is not a philosophical distinction — it has real consequences for how we interpret training research and design interventions. In this article, we use interactive simulations to make those consequences concrete. We first show how a strong association between size and strength changes can emerge even when one has nothing to do with the other. We then show how, even in a world where size genuinely does cause strength, the number we report can change dramatically depending on choices that have nothing to do with the underlying biology.
 
-::: {.callout-note}
-## How to read this article
-Each section has an interactive simulation powered by R running directly in your
-browser via [shinylive](https://posit-dev.github.io/r-shinylive/). Adjust the
-sliders to change the true causal structure of a simulated world, and the plots
-show what a researcher would observe if they ran a correlation study in that
-world.
-:::
-
 ---
 
 ## Part I — Three Ways Associations Arise
 
-Every association between two variables — muscle size (S) and strength (F) —
-traces back to one of three causal structures. We can draw these with **directed
-acyclic graphs (DAGs)**: arrows represent direct causal effects; the absence of
-an arrow means no direct effect (conditional on everything else in the graph).
+Every systematic association between muscle size (M) and strength (S) traces 
+back to one of three causal structures — or, in small samples, to chance alone. 
+We can represent these structures with **directed acyclic graphs (DAGs)**, where 
+an arrow from A to B means "A is a cause of B." No arrow means no direct causal 
+relationship. What makes DAGs useful is that they let us read off, just from the 
+diagram, which variables we would expect to be associated — and why.
 
 ### Structure 1 — Direct Causation
 
-```
-Training ──► Size (S) ──► Strength (F)
-                 ↑
-          (also Training ──► F directly, via neural adaptation)
+```{mermaid}
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}, 'flowchart': {'useMaxWidth': true, 'padding': 20}}}%%
+flowchart LR
+    T["Training"] --> S["Size (S)"]
+    S --> F["Strength (F)"]
+    T -->|"via neural adaptation"| F
 ```
 
 Training causes muscle to grow, and that growth directly causes strength to
@@ -81,12 +76,12 @@ only that the effect *exists*, not how large it is relative to all other pathway
 
 ### Structure 2 — Common Cause (Confounding)
 
-```
-         Training
-        ↙         ↘
-   Size (S)     Strength (F)
-        ↘         ↙
-     (spurious association)
+```{mermaid}
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}, 'flowchart': {'useMaxWidth': true, 'padding': 20}}}%%
+flowchart TD
+    T["Training"] --> S["Size (S)"]
+    T --> F["Strength (F)"]
+    S -. "spurious association" .-> F
 ```
 
 Training causes *both* muscle growth and strength gains independently — through
@@ -97,10 +92,12 @@ interpretation is wrong.**
 
 ### Structure 3 — Collider Bias (Selection)
 
-```
-Size (S) ──►  Progress score  ◄── Strength (F)
-              (conditioning here…)
-              (…opens a spurious path between S and F)
+```{mermaid}
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}, 'flowchart': {'useMaxWidth': true, 'padding': 20}}}%%
+flowchart LR
+    S["Size (S)"] --> P["Progress Score\n(collider)"]
+    F["Strength (F)"] --> P
+    S -. "spurious path opens\nwhen conditioning on P" .-> F
 ```
 
 Suppose a study retains only "good responders" — participants above a threshold
