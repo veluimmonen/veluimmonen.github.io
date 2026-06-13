@@ -62,10 +62,13 @@ an arrow means no direct effect (conditional on everything else in the graph).
 
 ### Structure 1 — Direct Causation
 
-```
-Training ──► Size (S) ──► Strength (F)
-                 ↑
-          (also Training ──► F directly, via neural adaptation)
+```{mermaid}
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px', 'background': '#0a0a0e', 'mainBkg': '#0a0a0e', 'nodeBorder': '#06b6d4', 'clusterBkg': '#0f0f15', 'titleColor': '#94a3b8', 'edgeColor': '#06b6d4', 'labelBackground': '#0f0f15', 'textColor': '#e2e8f0', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}}}%%
+flowchart LR
+    T[Training] --> S["Size (S)"]
+    T --> F["Strength (F)"]
+    S --> F
+    T -.->|"via neural\nadaptation"| F
 ```
 
 Training causes muscle to grow, and that growth directly causes strength to
@@ -74,12 +77,12 @@ only that the effect *exists*, not how large it is relative to all other pathway
 
 ### Structure 2 — Common Cause (Confounding)
 
-```
-         Training
-        ↙         ↘
-   Size (S)     Strength (F)
-        ↘         ↙
-     (spurious association)
+```{mermaid}
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px', 'background': '#0a0a0e', 'mainBkg': '#0a0a0e', 'nodeBorder': '#06b6d4', 'clusterBkg': '#0f0f15', 'titleColor': '#94a3b8', 'edgeColor': '#06b6d4', 'labelBackground': '#0f0f15', 'textColor': '#e2e8f0', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}}}%%
+flowchart TD
+    T[Training] --> S["Size (S)"]
+    T --> F["Strength (F)"]
+    S -. "spurious\nassociation" .-> F
 ```
 
 Training causes *both* muscle growth and strength gains independently — through
@@ -90,10 +93,12 @@ interpretation is wrong.**
 
 ### Structure 3 — Collider Bias (Selection)
 
-```
-Size (S) ──►  Progress score  ◄── Strength (F)
-              (conditioning here…)
-              (…opens a spurious path between S and F)
+```{mermaid}
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#0a0a0e', 'primaryBorderColor': '#06b6d4', 'primaryTextColor': '#e2e8f0', 'lineColor': '#06b6d4', 'edgeLabelBackground': '#0f0f15', 'fontFamily': 'JetBrains Mono, monospace', 'fontSize': '13px', 'background': '#0a0a0e', 'mainBkg': '#0a0a0e', 'nodeBorder': '#06b6d4', 'clusterBkg': '#0f0f15', 'titleColor': '#94a3b8', 'edgeColor': '#06b6d4', 'labelBackground': '#0f0f15', 'textColor': '#e2e8f0', 'secondaryColor': '#0f0f15', 'tertiaryColor': '#0f0f15'}}}%%
+flowchart LR
+    S["Size (S)"] --> P["Progress score\n(collider)"]
+    F["Strength (F)"] --> P
+    S -. "spurious path\nopens when\nconditioning on P" .-> F
 ```
 
 Suppose a study retains only "good responders" — participants above a threshold

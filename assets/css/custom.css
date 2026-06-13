@@ -556,6 +556,77 @@ td {
 tr:last-child td { border-bottom: none !important; }
 
 /* ===========================
+   Mermaid diagrams
+   =========================== */
+
+.cell-output-display:has(.mermaid),
+pre.mermaid,
+.mermaid {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  padding: 2rem 1.5rem !important;
+  margin: 1.75rem 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* Node boxes */
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node polygon {
+  fill: #0a0a0e !important;
+  stroke: #06b6d4 !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Node labels */
+.mermaid .node .label,
+.mermaid .nodeLabel {
+  color: #e2e8f0 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 12px !important;
+}
+
+/* Edge lines and arrows */
+.mermaid .edgePath .path,
+.mermaid .flowchart-link {
+  stroke: #06b6d4 !important;
+  stroke-width: 1.5px !important;
+}
+
+.mermaid marker path {
+  fill: #06b6d4 !important;
+  stroke: #06b6d4 !important;
+}
+
+/* Edge labels */
+.mermaid .edgeLabel,
+.mermaid .edgeLabel p {
+  background-color: var(--bg-card) !important;
+  color: #94a3b8 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+}
+
+/* Subgraph containers */
+.mermaid .cluster rect {
+  fill: rgba(6, 182, 212, 0.04) !important;
+  stroke: #1e2a3a !important;
+  stroke-dasharray: 5 3 !important;
+  stroke-width: 1px !important;
+}
+
+.mermaid .cluster-label {
+  color: #475569 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* ===========================
    Responsive
    =========================== */
 

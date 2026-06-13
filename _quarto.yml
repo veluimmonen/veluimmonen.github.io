@@ -32,6 +32,8 @@ format:
     link-external-newwindow: true
     smooth-scroll: true
     reading-time: true
+    mermaid:
+      theme: base
     include-in-header:
       - text: |
           <link rel="preconnect" href="https://fonts.googleapis.com">
