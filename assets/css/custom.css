@@ -1,22 +1,53 @@
 /*-- scss:rules --*/
 
 /* ===========================
-   Design tokens
+   Design tokens — edit here to retheme the entire site
    =========================== */
 
 :root {
-  --bg:          #0a0a0e;
-  --bg-card:     #0f0f15;
-  --bg-raised:   #131319;
-  --border:      #1a1a26;
-  --border-soft: #131320;
-  --text:        #e2e8f0;
-  --text-muted:  #94a3b8;
-  --text-dim:    #475569;
-  --teal:        #06b6d4;
-  --teal-dim:    rgba(6, 182, 212, 0.15);
-  --teal-glow:   rgba(6, 182, 212, 0.35);
-  --teal-dark:   #0891b2;
+  /* Backgrounds */
+  --bg:               #0a0a0e;
+  --bg-card:          #0f0f15;
+  --bg-raised:        #131319;
+
+  /* Borders */
+  --border:           #1a1a26;
+  --border-soft:      #131320;
+  --border-glass:     rgba(255, 255, 255, 0.06);
+
+  /* Text */
+  --text:             #e2e8f0;
+  --text-bright:      #f1f5f9;
+  --text-muted:       #94a3b8;
+  --text-dim:         #475569;
+
+  /* Accent — teal/cyan */
+  --accent:           #06b6d4;
+  --accent-light:     #67e8f9;
+  --accent-dark:      #0891b2;
+  --accent-dim:       rgba(6, 182, 212, 0.15);
+  --accent-glow:      rgba(6, 182, 212, 0.35);
+  --accent-glow-soft: rgba(6, 182, 212, 0.07);
+  --accent-hover-bg:  rgba(6, 182, 212, 0.25);
+  --accent-hover-bdr: rgba(6, 182, 212, 0.3);
+  --accent-hover-shd: rgba(6, 182, 212, 0.06);
+  --accent-cluster:   rgba(6, 182, 212, 0.04);
+
+  /* Secondary accent — warnings */
+  --warning:          #f59e0b;
+
+  /* Code */
+  --code-color:       #7dd3fc;
+
+  /* Scrollbar */
+  --scrollbar-thumb:  #1e2a3a;
+
+  /* Navbar */
+  --navbar-bg-top:      transparent;
+  --navbar-bg-scrolled: rgba(10, 10, 14, 0.82);
+  --navbar-blur:        16px;
+
+  /* Typography */
   --font-head:   'Space Grotesk', system-ui, sans-serif;
   --font-body:   'DM Sans', system-ui, sans-serif;
   --font-mono:   'JetBrains Mono', 'Courier New', monospace;
@@ -29,16 +60,15 @@
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #1e2a3a; border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: var(--teal-dark); }
-* { scrollbar-width: thin; scrollbar-color: #1e2a3a var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-dark); }
+* { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--bg); }
 
 body {
   background-color: var(--bg) !important;
-  /* Subtle teal glow from top-left */
   background-image: radial-gradient(
     ellipse 60% 50% at -5% -10%,
-    rgba(6, 182, 212, 0.07) 0%,
+    var(--accent-glow-soft) 0%,
     transparent 70%
   ) !important;
   background-attachment: fixed !important;
@@ -55,7 +85,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-head) !important;
-  color: #f1f5f9 !important;
+  color: var(--text-bright) !important;
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
@@ -67,14 +97,14 @@ h3 { font-size: 1.15rem; font-weight: 600; margin-top: 2rem; }
 p { margin-bottom: 1.25em; }
 
 a {
-  color: var(--teal) !important;
+  color: var(--accent) !important;
   text-decoration: none !important;
   transition: color 0.15s;
 }
 
-a:hover { color: #67e8f9 !important; }
+a:hover { color: var(--accent-light) !important; }
 
-strong { color: #f1f5f9; }
+strong { color: var(--text-bright); }
 
 code, .sourceCode {
   font-family: var(--font-mono) !important;
@@ -86,7 +116,7 @@ code:not(pre code) {
   border: 1px solid var(--border) !important;
   border-radius: 4px;
   padding: 0.15em 0.4em;
-  color: #7dd3fc !important;
+  color: var(--code-color) !important;
 }
 
 pre, pre.sourceCode, div.sourceCode {
@@ -99,7 +129,7 @@ pre, pre.sourceCode, div.sourceCode {
 pre code { color: var(--text) !important; background: none !important; border: none !important; }
 
 blockquote {
-  border-left: 3px solid var(--teal) !important;
+  border-left: 3px solid var(--accent) !important;
   background: var(--bg-card);
   color: var(--text-muted) !important;
   padding: 0.8rem 1.25rem !important;
@@ -115,28 +145,40 @@ hr {
 }
 
 /* Math */
-.math { color: var(--teal) !important; }
-mjx-container { color: var(--teal) !important; }
+.math { color: var(--accent) !important; }
+mjx-container { color: var(--accent) !important; }
 
 /* ===========================
-   Navbar
+   Navbar — transparent at top, glass when scrolled
    =========================== */
 
 .navbar {
-  background-color: rgba(10, 15, 26, 0.92) !important;
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border) !important;
+  background-color: var(--navbar-bg-top) !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid transparent !important;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+body.nav-scrolled .navbar {
+  background-color: var(--navbar-bg-scrolled) !important;
+  backdrop-filter: blur(var(--navbar-blur));
+  -webkit-backdrop-filter: blur(var(--navbar-blur));
+  border-bottom: 1px solid var(--border-glass) !important;
 }
 
 .navbar-brand {
   font-family: var(--font-head) !important;
   font-weight: 700 !important;
   font-size: 1rem !important;
-  color: #f1f5f9 !important;
+  color: var(--text-bright) !important;
   letter-spacing: -0.01em;
 }
 
-.navbar-brand:hover { color: var(--teal) !important; }
+.navbar-brand:hover { color: var(--accent) !important; }
 
 .navbar-nav .nav-link {
   font-family: var(--font-body) !important;
@@ -146,7 +188,7 @@ mjx-container { color: var(--teal) !important; }
   letter-spacing: 0.08em;
 }
 
-.navbar-nav .nav-link:hover { color: var(--teal) !important; }
+.navbar-nav .nav-link:hover { color: var(--accent) !important; }
 
 /* ===========================
    Footer
@@ -160,7 +202,7 @@ mjx-container { color: var(--teal) !important; }
 }
 
 .nav-footer a { color: var(--text-muted) !important; }
-.nav-footer a:hover { color: var(--teal) !important; }
+.nav-footer a:hover { color: var(--accent) !important; }
 
 /* ===========================
    Layout
@@ -197,23 +239,23 @@ mjx-container { color: var(--teal) !important; }
 }
 
 .btn:hover, a.btn:hover {
-  border-color: var(--teal) !important;
-  color: var(--teal) !important;
-  box-shadow: 0 0 14px var(--teal-glow) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  box-shadow: 0 0 14px var(--accent-glow) !important;
   text-decoration: none !important;
 }
 
 .btn-primary, a.btn-primary {
-  border-color: var(--teal) !important;
-  color: var(--teal) !important;
-  box-shadow: 0 0 10px var(--teal-glow) !important;
-  background: var(--teal-dim) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  box-shadow: 0 0 10px var(--accent-glow) !important;
+  background: var(--accent-dim) !important;
 }
 
 .btn-primary:hover, a.btn-primary:hover {
-  background: rgba(6, 182, 212, 0.25) !important;
-  box-shadow: 0 0 20px var(--teal-glow) !important;
-  color: #67e8f9 !important;
+  background: var(--accent-hover-bg) !important;
+  box-shadow: 0 0 20px var(--accent-glow) !important;
+  color: var(--accent-light) !important;
 }
 
 .btn-outline, a.btn-outline {
@@ -235,7 +277,7 @@ mjx-container { color: var(--teal) !important; }
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--teal);
+  color: var(--accent);
   margin-bottom: 1.2rem;
 }
 
@@ -297,7 +339,7 @@ mjx-container { color: var(--teal) !important; }
 .award-chip {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--teal);
+  color: var(--accent);
   border: 1px solid var(--border);
   padding: 0.3rem 0.8rem;
   border-radius: 999px;
@@ -313,12 +355,12 @@ mjx-container { color: var(--teal) !important; }
   transition: border-color 0.2s;
 }
 
-.work-card:hover { border-color: rgba(6, 182, 212, 0.3); }
+.work-card:hover { border-color: var(--accent-hover-bdr); }
 
 .work-badge {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  color: var(--teal);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 0.5rem;
@@ -350,8 +392,8 @@ mjx-container { color: var(--teal) !important; }
 }
 
 .work-link:hover {
-  color: var(--teal) !important;
-  border-color: var(--teal) !important;
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
 }
 
 /* ===========================
@@ -374,8 +416,8 @@ mjx-container { color: var(--teal) !important; }
 }
 
 .quarto-listing-default .quarto-post:hover {
-  border-color: rgba(6, 182, 212, 0.3) !important;
-  box-shadow: 0 4px 24px rgba(6, 182, 212, 0.06) !important;
+  border-color: var(--accent-hover-bdr) !important;
+  box-shadow: 0 4px 24px var(--accent-hover-shd) !important;
 }
 
 /* Date + reading time row */
@@ -401,7 +443,7 @@ mjx-container { color: var(--teal) !important; }
   font-family: var(--font-head) !important;
   font-size: 1.35rem !important;
   font-weight: 700 !important;
-  color: #f1f5f9 !important;
+  color: var(--text-bright) !important;
   margin: 0.25rem 0 0.6rem !important;
   letter-spacing: -0.02em !important;
   border: none !important;
@@ -410,11 +452,11 @@ mjx-container { color: var(--teal) !important; }
 }
 
 .quarto-listing-default .listing-title a {
-  color: #f1f5f9 !important;
+  color: var(--text-bright) !important;
   text-decoration: none !important;
 }
 
-.quarto-listing-default .listing-title a:hover { color: var(--teal) !important; }
+.quarto-listing-default .listing-title a:hover { color: var(--accent) !important; }
 
 /* Description */
 .quarto-listing-default .listing-description,
@@ -430,7 +472,7 @@ mjx-container { color: var(--teal) !important; }
   content: "Read article →";
   display: block;
   font-size: 0.85rem;
-  color: var(--teal);
+  color: var(--accent);
   margin-top: 0.75rem;
   font-weight: 500;
 }
@@ -459,7 +501,6 @@ mjx-container { color: var(--teal) !important; }
    Blog post
    =========================== */
 
-/* Post title area */
 .quarto-title-meta {
   font-family: var(--font-mono) !important;
   font-size: 0.75rem !important;
@@ -491,18 +532,18 @@ mjx-container { color: var(--teal) !important; }
   background: transparent !important;
   border-bottom: 1px solid var(--border) !important;
   padding: 0.6rem 1rem !important;
-  color: var(--teal) !important;
+  color: var(--accent) !important;
 }
 
 .callout-note {
-  border-left: 3px solid var(--teal) !important;
+  border-left: 3px solid var(--accent) !important;
 }
 
 .callout-warning {
-  border-left: 3px solid #f59e0b !important;
+  border-left: 3px solid var(--warning) !important;
 }
 
-.callout-warning .callout-header { color: #f59e0b !important; }
+.callout-warning .callout-header { color: var(--warning) !important; }
 
 .callout-body {
   padding: 0.75rem 1rem !important;
@@ -525,7 +566,7 @@ mjx-container { color: var(--teal) !important; }
 
 #TOC a:hover, nav.toc-active a:hover,
 #TOC a.active, nav.toc-active a.active {
-  color: var(--teal) !important;
+  color: var(--accent) !important;
 }
 
 /* Shinylive iframe */
@@ -571,55 +612,50 @@ pre.mermaid,
   justify-content: center !important;
 }
 
-/* Node boxes */
 .mermaid .node rect,
 .mermaid .node circle,
 .mermaid .node ellipse,
 .mermaid .node polygon {
-  fill: #0a0a0e !important;
-  stroke: #06b6d4 !important;
+  fill: var(--bg) !important;
+  stroke: var(--accent) !important;
   stroke-width: 1.5px !important;
 }
 
-/* Node labels */
 .mermaid .node .label,
 .mermaid .nodeLabel {
-  color: #e2e8f0 !important;
+  color: var(--text) !important;
   font-family: var(--font-mono) !important;
   font-size: 12px !important;
 }
 
-/* Edge lines and arrows */
 .mermaid .edgePath .path,
 .mermaid .flowchart-link {
-  stroke: #06b6d4 !important;
+  stroke: var(--accent) !important;
   stroke-width: 1.5px !important;
 }
 
 .mermaid marker path {
-  fill: #06b6d4 !important;
-  stroke: #06b6d4 !important;
+  fill: var(--accent) !important;
+  stroke: var(--accent) !important;
 }
 
-/* Edge labels */
 .mermaid .edgeLabel,
 .mermaid .edgeLabel p {
   background-color: var(--bg-card) !important;
-  color: #94a3b8 !important;
+  color: var(--text-muted) !important;
   font-family: var(--font-mono) !important;
   font-size: 11px !important;
 }
 
-/* Subgraph containers */
 .mermaid .cluster rect {
-  fill: rgba(6, 182, 212, 0.04) !important;
-  stroke: #1e2a3a !important;
+  fill: var(--accent-cluster) !important;
+  stroke: var(--scrollbar-thumb) !important;
   stroke-dasharray: 5 3 !important;
   stroke-width: 1px !important;
 }
 
 .mermaid .cluster-label {
-  color: #475569 !important;
+  color: var(--text-dim) !important;
   font-family: var(--font-mono) !important;
   font-size: 10px !important;
   text-transform: uppercase !important;
