@@ -47,11 +47,17 @@
   --navbar-bg-scrolled: rgba(10, 10, 14, 0.82);
   --navbar-blur:        16px;
 
-  /* Typography — change font names here, and update the URL in assets/fonts.html */
-  --font-head:   'Inter', system-ui, sans-serif;
+  /* Typography — change font names here, and update the URL in assets/fonts.html
+     --font-head : serif titles (h1, page headings)
+     --font-body : serif prose (article paragraphs, lists)
+     --font-ui   : sans-serif for all UI — h2-h6, nav, callouts, tags, TOC, metadata
+     --font-logo : wordmark only
+     --font-mono : code */
+  --font-head:   'Newsreader', Georgia, serif;
   --font-body:   'Newsreader', Georgia, serif;
+  --font-ui:     'DM Sans', system-ui, sans-serif;
   --font-mono:   'JetBrains Mono', 'Courier New', monospace;
-  --font-logo:   'Outfit', system-ui, sans-serif;  /* wordmark only — swap here */
+  --font-logo:   'Outfit', system-ui, sans-serif;
 }
 
 /* ===========================
@@ -74,26 +80,64 @@ body {
   ) !important;
   background-attachment: fixed !important;
   color: var(--text) !important;
-  font-family: var(--font-body) !important;
+  font-family: var(--font-ui) !important;   /* DM Sans as default everywhere */
   font-size: 17px;
-  line-height: 1.75;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Article prose: switch to editorial serif at larger size */
+.page-layout-article .content p,
+.page-layout-article .content > section p,
+.page-layout-article .content li,
+.page-layout-article .content > section li,
+.page-layout-full .content p,
+.page-layout-full .content li {
+  font-family: var(--font-body) !important;
+  font-size: 19px;
+  line-height: 1.72;
+}
+
+/* Keep callout / blockquote body in sans — they're structural, not prose */
+.callout p,
+.callout li,
+.callout-body p,
+.callout-body li,
+.home-section p,
+.tagline,
+.page-intro,
+.quarto-listing-default .listing-description,
+.quarto-listing-default .description {
+  font-family: var(--font-ui) !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
 }
 
 /* ===========================
    Typography
    =========================== */
 
-h1, h2, h3, h4, h5, h6 {
+/* H1 — large editorial serif titles */
+h1 {
   font-family: var(--font-head) !important;
   color: var(--text-bright) !important;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.15;
+  font-size: 2.6rem;
+  font-weight: 700;
 }
 
-h1 { font-size: 2.6rem; font-weight: 700; }
-h2 { font-size: 1.5rem; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-top: 2.5rem; }
-h3 { font-size: 1.15rem; font-weight: 600; margin-top: 2rem; }
+/* H2–H6 — clean sans-serif for structure and navigation */
+h2, h3, h4, h5, h6 {
+  font-family: var(--font-ui) !important;
+  color: var(--text-bright) !important;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+h2 { font-size: 1.35rem; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-top: 2.5rem; }
+h3 { font-size: 1.1rem;  font-weight: 600; margin-top: 2rem; }
+h4 { font-size: 0.95rem; font-weight: 600; margin-top: 1.5rem; }
 
 p { margin-bottom: 1.25em; }
 
@@ -221,7 +265,7 @@ body.nav-scrolled .logo-collapse {
 }
 
 .navbar-nav .nav-link {
-  font-family: var(--font-body) !important;
+  font-family: var(--font-ui) !important;
   font-size: 0.82rem !important;
   color: var(--text-muted) !important;
   text-transform: uppercase;
@@ -263,7 +307,7 @@ body.nav-scrolled .logo-collapse {
    =========================== */
 
 .btn, a.btn {
-  font-family: var(--font-body) !important;
+  font-family: var(--font-ui) !important;
   font-size: 0.78rem !important;
   font-weight: 500;
   text-transform: uppercase;
@@ -480,7 +524,7 @@ body.nav-scrolled .logo-collapse {
 /* Title */
 .quarto-listing-default .listing-title,
 .quarto-listing-default h3.listing-title {
-  font-family: var(--font-head) !important;
+  font-family: var(--font-ui) !important;
   font-size: 1.35rem !important;
   font-weight: 700 !important;
   color: var(--text-bright) !important;
@@ -525,13 +569,14 @@ body.nav-scrolled .logo-collapse {
 }
 
 .quarto-title-block .title {
-  font-family: var(--font-head) !important;
+  font-family: var(--font-head) !important;   /* serif — large editorial title */
   font-size: 2.6rem !important;
   font-weight: 700 !important;
   letter-spacing: -0.03em !important;
 }
 
 .quarto-title-block .subtitle {
+  font-family: var(--font-ui) !important;     /* sans — structural metadata */
   color: var(--text-muted) !important;
   font-size: 1rem !important;
   margin-top: 0.5rem !important;
