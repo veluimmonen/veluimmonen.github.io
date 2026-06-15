@@ -39,10 +39,32 @@ format:
       - text: |
           <script>
             (function () {
+              /* Frosted navbar on scroll */
               function onScroll() {
                 document.body.classList.toggle('nav-scrolled', window.scrollY > 30);
               }
               window.addEventListener('scroll', onScroll, { passive: true });
               onScroll();
+
+              /* Animated wordmark: VELU /MMONEN ↔ V/
+                 The V uses a custom glyph: | left stroke, / right stroke.
+                 "ELU " and "MMONEN" collapse when nav-scrolled is active. */
+              function buildLogo() {
+                var brand = document.querySelector('a.navbar-brand');
+                if (!brand) return;
+                brand.setAttribute('aria-label', 'Velu Immonen');
+                brand.innerHTML =
+                  '<svg class="logo-v-glyph" viewBox="0 0 20 22" aria-hidden="true">' +
+                    '<path d="M2,1 L2,21 L19,1" fill="none" stroke="currentColor"' +
+                    ' stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+                  '</svg>' +
+                  '<span class="logo-collapse">ELU </span>' +
+                  '<span class="logo-slash">/</span>' +
+                  '<span class="logo-collapse">MMONEN</span>';
+              }
+
+              document.readyState === 'loading'
+                ? document.addEventListener('DOMContentLoaded', buildLogo)
+                : buildLogo();
             })();
           </script>
