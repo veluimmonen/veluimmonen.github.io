@@ -86,13 +86,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Article prose: switch to editorial serif at larger size */
+/* Article prose only — serif at larger size for blog posts, NOT home/works pages */
 .page-layout-article .content p,
 .page-layout-article .content > section p,
 .page-layout-article .content li,
-.page-layout-article .content > section li,
-.page-layout-full .content p,
-.page-layout-full .content li {
+.page-layout-article .content > section li {
   font-family: var(--font-body) !important;
   font-size: 19px;
   line-height: 1.72;
@@ -575,6 +573,8 @@ body.nav-scrolled .logo-collapse {
   letter-spacing: -0.03em !important;
 }
 
+/* Use ID prefix (#title-block-header = 1-1-0) to beat the prose rule (0-2-1) */
+#title-block-header .subtitle,
 .quarto-title-block .subtitle {
   font-family: var(--font-ui) !important;     /* sans — structural metadata */
   color: var(--text-muted) !important;
@@ -586,6 +586,7 @@ body.nav-scrolled .logo-collapse {
    Blog post
    =========================== */
 
+#title-block-header .quarto-title-meta,
 .quarto-title-meta {
   font-family: var(--font-mono) !important;
   font-size: 0.75rem !important;

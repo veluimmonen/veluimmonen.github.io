@@ -38,21 +38,25 @@ format:
       - assets/fonts.html
       - text: |
           <script>
+            /* Frosted navbar — runs immediately from <head> so it's ready on first scroll */
             (function () {
-              /* ── Frosted navbar ── */
               function onScroll() {
                 document.body.classList.toggle('nav-scrolled', window.scrollY > 10);
               }
               window.addEventListener('scroll', onScroll, { passive: true });
               onScroll();
-
-              /* ── Animated wordmark: VELU /MMONEN <-> V/ ──
-                 Uses createElementNS so the SVG glyph renders correctly.
-                 Retries multiple times to survive any deferred Quarto DOM work. */
+            })();
+          </script>
+    include-after-body:
+      - text: |
+          <script>
+            /* Animated wordmark: VELU /MMONEN <-> V/
+               Runs after </body> so Quarto's navbar DOM is fully settled. */
+            (function () {
               function buildLogo() {
                 var brand = document.querySelector('.navbar-brand');
                 if (!brand) return false;
-                if (brand.querySelector('.logo-v-glyph')) return true; /* already done */
+                if (brand.querySelector('.logo-v-glyph')) return true;
 
                 brand.setAttribute('aria-label', 'Velu Immonen');
 
@@ -82,7 +86,6 @@ format:
                 rest.className = 'logo-collapse';
                 rest.textContent = 'MMONEN';
 
-                /* clear existing text then append */
                 while (brand.firstChild) brand.removeChild(brand.firstChild);
                 brand.appendChild(svg);
                 brand.appendChild(elu);
@@ -91,18 +94,9 @@ format:
                 return true;
               }
 
-              /* retry at 0 / 150 / 400 / 800 ms after DOM ready */
-              function scheduleLogoBuilds() {
-                [0, 150, 400, 800].forEach(function (delay) {
-                  setTimeout(buildLogo, delay);
-                });
-              }
-
-              if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', scheduleLogoBuilds);
-              } else {
-                scheduleLogoBuilds();
-              }
-              window.addEventListener('load', buildLogo);
+              /* DOM is already parsed at this point; run immediately then retry
+                 once more at 200ms in case Quarto re-renders the navbar */
+              buildLogo();
+              setTimeout(buildLogo, 200);
             })();
           </script>

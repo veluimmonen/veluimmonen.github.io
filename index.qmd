@@ -2,6 +2,13 @@
 title: ""
 page-layout: full
 toc: false
+listing:
+  - id: recent-posts
+    contents: posts
+    sort: "date desc"
+    max-items: 3
+    type: default
+    fields: [date, title, description, reading-time]
 ---
 
 ::: {.home-hero}
@@ -28,13 +35,7 @@ Based in Southampton.
 Recent writing
 :::
 
-```{=html}
-<div class="recent-posts-list">
-  <!-- Quarto listing will populate this via blog.qmd -->
-  <p style="color: var(--fp-text-muted); font-size: 0.9rem;">
-    Posts will appear here once published. See the <a href="blog.html">blog archive</a>.
-  </p>
-</div>
-```
+:::{#recent-posts}
+:::
 
 :::
