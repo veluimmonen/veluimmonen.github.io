@@ -1,0 +1,16 @@
+---
+title: "Causality Part I"
+author: "Velu Immonen"
+format: html
+editor: visual
+---
+
+## Title
+
+In the previous blog series (see parts I-III) we showed how correlations fail. Now you may wonder, what gives...
+
+Mediation is an inherently causal model, where the causal antecedent (X) causes the mediator (M), which then causes the outcome variable (Y). An indirect effect is meant to quantify the causal effect that X has on Y through M. While random assignment to condition is sufficient for causal inference in examining the effect of X on Y, random assignment on X is not sufficient to know that all of the effects in a mediation analysis are themselves causal. Importantly, because the mediator is not randomly assigned, it is unknown whether the estimate of its effect on the outcome is an estimate of a causal effect.
+
+## Within or between
+
+To reasonably compare between- and within-subject designs, the indirect effects are assumed to be equal; however, this does not necessarily mean that these effects will be equal in a given research context, in particular the relationship between M and Y. In choosing a design, researchers should reflect on whether they expect these effects to differ across levels (within and between) and which of these effects is of primary interest.

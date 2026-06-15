@@ -47,9 +47,9 @@
   --navbar-bg-scrolled: rgba(10, 10, 14, 0.82);
   --navbar-blur:        16px;
 
-  /* Typography */
-  --font-head:   'Space Grotesk', system-ui, sans-serif;
-  --font-body:   'DM Sans', system-ui, sans-serif;
+  /* Typography — change font names here, and update the URL in assets/fonts.html */
+  --font-head:   'Newsreader', Georgia, serif;
+  --font-body:   'Inter', system-ui, sans-serif;
   --font-mono:   'JetBrains Mono', 'Courier New', monospace;
 }
 
