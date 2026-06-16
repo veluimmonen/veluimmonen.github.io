@@ -280,28 +280,27 @@ body.nav-scrolled .logo-collapse {
 .nav-footer a:hover { color: var(--accent) !important; }
 
 /* Social icons in footer */
+.nav-footer-right {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+}
+
 .footer-socials {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.75rem;
   align-items: center;
 }
 
 .social-icon {
   color: var(--text-muted) !important;
-  font-size: 1.1rem;      /* controls Bootstrap icon font size */
+  font-size: 1.2rem;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none !important;
   transition: color 0.2s ease, filter 0.2s ease;
-}
-
-/* Inline SVG (ResearchGate) — match Bootstrap icon font size exactly */
-.social-svg {
-  width: 1.1rem;
-  height: 1.1rem;
-  flex-shrink: 0;
 }
 
 .social-icon:hover {
@@ -731,10 +730,11 @@ body.nav-scrolled .logo-collapse {
   color: var(--accent) !important;
 }
 
-/* TOC active indicator — color only, no custom borders (Quarto renders its own track) */
+/* TOC active indicator — override text and border color, let Quarto render the track */
 #TOC .nav-link.active,
 nav[role="doc-toc"] .nav-link.active {
   color: var(--accent) !important;
+  border-left-color: var(--accent) !important;
 }
 
 /* Shinylive iframe */

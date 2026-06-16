@@ -14,15 +14,9 @@ website:
     left: "© Velu Immonen"
     right: |
       <div class="footer-socials">
-        <a href="https://github.com/veluimmonen" class="social-icon" target="_blank" rel="noopener" aria-label="GitHub">
-          <i class="bi bi-github"></i>
-        </a>
-        <a href="https://www.instagram.com/veluimmonen/" class="social-icon" target="_blank" rel="noopener" aria-label="Instagram">
-          <i class="bi bi-instagram"></i>
-        </a>
-        <a href="https://www.researchgate.net/profile/Velu-Immonen" class="social-icon" target="_blank" rel="noopener" aria-label="ResearchGate">
-          <svg viewBox="0 0 24 24" fill="currentColor" class="social-svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.586 0H4.413A4.413 4.413 0 0 0 0 4.413v15.173A4.413 4.413 0 0 0 4.413 24h15.173A4.413 4.413 0 0 0 24 19.586V4.413A4.413 4.413 0 0 0 19.586 0ZM15.384 17.53h-2.858l-2.574-5.332h-.918V17.53H6.734V6.47h4.61c2.443 0 3.808 1.162 3.808 3.207 0 1.487-.87 2.554-2.34 2.94Zm-3.843-7.485c0-.87-.55-1.24-1.72-1.24H9.034v2.538H9.7c1.3 0 1.841-.49 1.841-1.298Zm4.988 3.26h-1.34v1.34h-.893v-1.34h-1.34v-.893h1.34v-1.34h.893v1.34h1.34Z"/></svg>
-        </a>
+        <a href="https://github.com/veluimmonen" class="social-icon" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.instagram.com/veluimmonen/" class="social-icon" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.researchgate.net/profile/Velu-Immonen" class="social-icon" target="_blank" rel="noopener" aria-label="ResearchGate"><i class="fa-brands fa-researchgate"></i></a>
       </div>
 
 format:
