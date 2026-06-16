@@ -68,10 +68,11 @@ format:
                 elu.textContent = 'ELU';
 
                 var i = document.createElement('span');
+                i.className = 'logo-accent';
                 i.textContent = 'I';
 
                 var mmonen = document.createElement('span');
-                mmonen.className = 'logo-collapse';
+                mmonen.className = 'logo-collapse logo-accent';
                 mmonen.textContent = 'MMONEN';
 
                 while (brand.firstChild) brand.removeChild(brand.firstChild);

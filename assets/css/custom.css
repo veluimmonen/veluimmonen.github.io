@@ -230,6 +230,9 @@ body.nav-scrolled .navbar {
 
 .navbar-brand:hover { color: var(--text-bright) !important; }
 
+/* VELU = white (inherits), IMMONEN = accent blue */
+.logo-accent { color: var(--accent) !important; }
+
 /* Parts that collapse on scroll: "ELU" and "MMONEN" */
 .logo-collapse {
   display: inline-block;
@@ -557,7 +560,7 @@ body.nav-scrolled .logo-collapse {
 }
 
 .quarto-title-block .title {
-  font-family: var(--font-head) !important;   /* serif — large editorial title */
+  font-family: var(--font-ui) !important;     /* sans — modern, like Anthropic blog */
   font-size: 2.6rem !important;
   font-weight: 700 !important;
   letter-spacing: -0.03em !important;
@@ -586,11 +589,36 @@ body.nav-scrolled .logo-collapse {
   margin-top: 1.25rem;
 }
 
+/* Force the date <p> to sans/mono — beats prose rule (0-2-1) via ID specificity (1-2-1) */
+#title-block-header .quarto-title-meta p,
+#title-block-header .quarto-title-meta-contents p {
+  font-family: var(--font-mono) !important;
+  font-size: 0.9rem !important;
+  line-height: 1.4 !important;
+  color: var(--text-dim) !important;
+}
+
 .quarto-title-meta-heading {
   color: var(--text-dim) !important;
   font-size: 0.68rem !important;
   text-transform: uppercase !important;
   letter-spacing: 0.1em !important;
+}
+
+/* Gap between category tags and description, muted description color */
+.quarto-categories {
+  margin-bottom: 1.25rem !important;
+  margin-top: 0.75rem !important;
+}
+
+#title-block-header .description p,
+#title-block-header .abstract p,
+.quarto-title-block .description,
+.quarto-title-block .abstract {
+  font-family: var(--font-ui) !important;
+  color: var(--text-muted) !important;
+  font-size: 1rem !important;
+  line-height: 1.7 !important;
 }
 
 /* Callouts */
@@ -611,9 +639,22 @@ body.nav-scrolled .logo-collapse {
   color: var(--accent) !important;
 }
 
-.callout-note {
+/* All callout types use accent (teal) — override Bootstrap's green for tip */
+.callout-note,
+.callout-tip {
   border-left: 3px solid var(--accent) !important;
 }
+
+/* Force callout SVG icons to accent color */
+.callout .callout-header svg,
+.callout-tip .callout-header .callout-icon-container,
+.callout-tip .callout-header svg {
+  color: var(--accent) !important;
+  fill: var(--accent) !important;
+}
+
+/* Override Bootstrap's green on the tip icon specifically */
+.callout-tip > .callout-header { color: var(--accent) !important; }
 
 .callout-warning {
   border-left: 3px solid var(--warning) !important;
@@ -643,6 +684,19 @@ body.nav-scrolled .logo-collapse {
 #TOC a:hover, nav.toc-active a:hover,
 #TOC a.active, nav.toc-active a.active {
   color: var(--accent) !important;
+}
+
+/* Active section indicator bar — force teal, override any Bootstrap green */
+#TOC .nav-link.active,
+nav[role="doc-toc"] .nav-link.active {
+  color: var(--accent) !important;
+  border-left: 2px solid var(--accent) !important;
+  padding-left: calc(0.5rem - 2px) !important;
+}
+
+nav[role="doc-toc"] ul {
+  border-left: 1px solid var(--border) !important;
+  padding-left: 0.5rem;
 }
 
 /* Shinylive iframe */
