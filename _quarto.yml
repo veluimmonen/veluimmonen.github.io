@@ -56,41 +56,29 @@ format:
               function buildLogo() {
                 var brand = document.querySelector('.navbar-brand');
                 if (!brand) return false;
-                if (brand.querySelector('.logo-v-glyph')) return true;
+                if (brand.querySelector('.logo-collapse')) return true;
 
                 brand.setAttribute('aria-label', 'Velu Immonen');
 
-                var NS = 'http://www.w3.org/2000/svg';
-                var svg  = document.createElementNS(NS, 'svg');
-                svg.setAttribute('viewBox', '0 0 20 22');
-                svg.setAttribute('class', 'logo-v-glyph');
-                svg.setAttribute('aria-hidden', 'true');
-                var path = document.createElementNS(NS, 'path');
-                path.setAttribute('d', 'M1,2 L10,20 L19,2');
-                path.setAttribute('fill', 'none');
-                path.setAttribute('stroke', 'currentColor');
-                path.setAttribute('stroke-width', '2.5');
-                path.setAttribute('stroke-linecap', 'round');
-                path.setAttribute('stroke-linejoin', 'round');
-                svg.appendChild(path);
+                var v = document.createElement('span');
+                v.textContent = 'V';
 
-                var elu   = document.createElement('span');
+                var elu = document.createElement('span');
                 elu.className = 'logo-collapse';
-                elu.textContent = 'ELU ';
+                elu.textContent = 'ELU';
 
-                var slash = document.createElement('span');
-                slash.className = 'logo-slash';
-                slash.textContent = '/';
+                var i = document.createElement('span');
+                i.textContent = 'I';
 
-                var rest  = document.createElement('span');
-                rest.className = 'logo-collapse';
-                rest.textContent = 'MMONEN';
+                var mmonen = document.createElement('span');
+                mmonen.className = 'logo-collapse';
+                mmonen.textContent = 'MMONEN';
 
                 while (brand.firstChild) brand.removeChild(brand.firstChild);
-                brand.appendChild(svg);
+                brand.appendChild(v);
                 brand.appendChild(elu);
-                brand.appendChild(slash);
-                brand.appendChild(rest);
+                brand.appendChild(i);
+                brand.appendChild(mmonen);
                 return true;
               }
 

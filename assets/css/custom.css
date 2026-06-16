@@ -230,16 +230,7 @@ body.nav-scrolled .navbar {
 
 .navbar-brand:hover { color: var(--text-bright) !important; }
 
-/* Custom V glyph: | left stroke, / right stroke */
-.logo-v-glyph {
-  height: 0.82em;
-  width: auto;
-  display: inline-block;
-  vertical-align: -0.08em;
-  flex-shrink: 0;
-}
-
-/* Parts that collapse on scroll: "ELU " and "MMONEN" */
+/* Parts that collapse on scroll: "ELU" and "MMONEN" */
 .logo-collapse {
   display: inline-block;
   overflow: hidden;
@@ -260,12 +251,6 @@ body.nav-scrolled .logo-collapse {
     opacity   0.18s ease;
 }
 
-/* The "/" — white to match V glyph, no accent tint */
-.logo-slash {
-  color: var(--text-bright);
-  display: inline-block;
-  flex-shrink: 0;
-}
 
 .navbar-nav .nav-link {
   font-family: var(--font-ui) !important;
