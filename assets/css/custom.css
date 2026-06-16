@@ -279,6 +279,34 @@ body.nav-scrolled .logo-collapse {
 .nav-footer a { color: var(--text-muted) !important; }
 .nav-footer a:hover { color: var(--accent) !important; }
 
+/* Social icons in footer */
+.footer-socials {
+  display: flex;
+  gap: 1.1rem;
+  align-items: center;
+}
+
+.social-icon {
+  color: var(--text-muted) !important;
+  font-size: 1.15rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none !important;
+  transition: color 0.2s ease, filter 0.2s ease;
+}
+
+.social-icon svg {
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: middle;
+}
+
+.social-icon:hover {
+  color: var(--accent-light) !important;
+  filter: drop-shadow(0 0 6px var(--accent-glow));
+}
+
 /* ===========================
    Layout
    =========================== */
@@ -533,11 +561,18 @@ body.nav-scrolled .logo-collapse {
 
 .quarto-listing-default .listing-title a:hover { color: var(--accent) !important; }
 
-/* Description — explicit white/bright so it doesn't inherit link blue from card <a> */
+/* The card itself is an <a> tag — reset inherited accent so child text isn't all blue */
+.quarto-listing-default .quarto-post,
+.quarto-listing-default a.quarto-post {
+  color: var(--text) !important;
+}
+
+/* Description — matches callout body muted colour */
 .quarto-listing-default .listing-description,
 .quarto-listing-default .description,
-.quarto-listing-default .quarto-post .listing-description {
-  color: var(--text-bright) !important;
+.quarto-listing-default .quarto-post .listing-description,
+.quarto-listing-default a.quarto-post .listing-description {
+  color: var(--text-muted) !important;
   font-size: 0.92rem !important;
   line-height: 1.65 !important;
   margin-bottom: 1rem !important;
@@ -646,16 +681,23 @@ body.nav-scrolled .logo-collapse {
   border-left: 3px solid var(--accent) !important;
 }
 
-/* Force callout SVG icons to accent color */
+/* Override Bootstrap's success/green — callout-tip icon uses this via background-image SVG */
+.callout-tip {
+  --bs-success: var(--accent) !important;
+  --bs-success-rgb: 6, 182, 212 !important;
+}
+
+/* Hue-shift the baked-in green SVG icon toward teal as a reliable fallback */
+.callout-tip .callout-icon-container {
+  filter: hue-rotate(26deg) saturate(0.9) brightness(1.15);
+}
+
+/* SVG icon if rendered inline */
 .callout .callout-header svg,
-.callout-tip .callout-header .callout-icon-container,
 .callout-tip .callout-header svg {
   color: var(--accent) !important;
   fill: var(--accent) !important;
 }
-
-/* Override Bootstrap's green on the tip icon specifically */
-.callout-tip > .callout-header { color: var(--accent) !important; }
 
 .callout-warning {
   border-left: 3px solid var(--warning) !important;
@@ -687,17 +729,22 @@ body.nav-scrolled .logo-collapse {
   color: var(--accent) !important;
 }
 
-/* Active section indicator bar — force teal, override any Bootstrap green */
+/* TOC track: a single left border on the nav element, active item draws over it */
+nav[role="doc-toc"] > ul,
+#TOC > ul {
+  border-left: 2px solid var(--border) !important;
+  padding-left: 0.75rem !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+/* Active indicator: shift the link left by 2px to perfectly overlap the track border */
 #TOC .nav-link.active,
 nav[role="doc-toc"] .nav-link.active {
   color: var(--accent) !important;
+  margin-left: -0.75rem !important;
+  padding-left: calc(0.75rem - 2px) !important;
   border-left: 2px solid var(--accent) !important;
-  padding-left: calc(0.5rem - 2px) !important;
-}
-
-nav[role="doc-toc"] ul {
-  border-left: 1px solid var(--border) !important;
-  padding-left: 0.5rem;
 }
 
 /* Shinylive iframe */
