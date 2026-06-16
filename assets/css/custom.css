@@ -282,24 +282,26 @@ body.nav-scrolled .logo-collapse {
 /* Social icons in footer */
 .footer-socials {
   display: flex;
-  gap: 1.1rem;
+  gap: 1.5rem;
   align-items: center;
 }
 
 .social-icon {
   color: var(--text-muted) !important;
-  font-size: 1.15rem;
+  font-size: 1.1rem;      /* controls Bootstrap icon font size */
   line-height: 1;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   text-decoration: none !important;
   transition: color 0.2s ease, filter 0.2s ease;
 }
 
-.social-icon svg {
-  width: 1.15em;
-  height: 1.15em;
-  vertical-align: middle;
+/* Inline SVG (ResearchGate) — match Bootstrap icon font size exactly */
+.social-svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
 }
 
 .social-icon:hover {
@@ -729,22 +731,10 @@ body.nav-scrolled .logo-collapse {
   color: var(--accent) !important;
 }
 
-/* TOC track: a single left border on the nav element, active item draws over it */
-nav[role="doc-toc"] > ul,
-#TOC > ul {
-  border-left: 2px solid var(--border) !important;
-  padding-left: 0.75rem !important;
-  margin: 0 !important;
-  list-style: none !important;
-}
-
-/* Active indicator: shift the link left by 2px to perfectly overlap the track border */
+/* TOC active indicator — color only, no custom borders (Quarto renders its own track) */
 #TOC .nav-link.active,
 nav[role="doc-toc"] .nav-link.active {
   color: var(--accent) !important;
-  margin-left: -0.75rem !important;
-  padding-left: calc(0.75rem - 2px) !important;
-  border-left: 2px solid var(--accent) !important;
 }
 
 /* Shinylive iframe */

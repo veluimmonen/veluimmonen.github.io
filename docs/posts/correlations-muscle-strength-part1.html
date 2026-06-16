@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2026-06-13">
-<meta name="description" content="A recent analysis found r = 0.92 between hypertrophy and strength gains. But high correlations have many parents — and causation is only one of them. This article uses interactive R simulations to show exactly how associations arise, and why they systematically mislead.">
+<meta name="description" content="Correlations between changes in muscle size and strength vary wildly across studies — anywhere from near zero to above 0.9. But this variability tells us less about biology than we might think: the same training programme, run twice, can produce almost any correlation depending on who you recruit, how you measure change, and which causal forces happen to dominate in your sample. This article uses interactive simulations to show the three structural reasons associations arise — and why none of them, on their own, can tell us whether size actually causes strength.">
 
 <title>Why Correlations Can’t Tell Us Whether Muscle Size Causes Strength – Velu Immonen</title>
 <style>
@@ -22,42 +22,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-</style>
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -77,7 +62,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-7e9717d9caa9b4d114d189eaeb260ada.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c821f8dfc1a3c8f47b9c68b71f7619e8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-b24ceb98eae11c8285d18a77d79e121d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <meta name="shinylive:serviceworker_dir" content="..">
 <script src="../site_libs/quarto-contrib/shinylive-0.10.12/shinylive/load-shinylive-sw.js" type="module"></script>
 <script src="../site_libs/quarto-contrib/shinylive-0.10.12/shinylive/run-python-blocks.js" type="module"></script>
@@ -111,7 +96,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
+<!-- Typography — edit this file to swap Google Fonts.
+     Then update the --font-* variables in assets/css/custom.css to match. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&amp;family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&amp;family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&amp;family=Outfit:wght@400..800&amp;display=swap" rel="stylesheet">
+<script>
+  /* Frosted navbar — runs immediately from <head> so it's ready on first scroll */
+  (function () {
+    function onScroll() {
+      document.body.classList.toggle('nav-scrolled', window.scrollY > 10);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -135,23 +164,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../works.html"> 
 <span class="menu-text">Works</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Blog</span></a>
-  </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/veluimmonen"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -169,22 +187,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#part-i-three-ways-associations-arise" id="toc-part-i-three-ways-associations-arise" class="nav-link active" data-scroll-target="#part-i-three-ways-associations-arise">Part I — Three Ways Associations Arise</a>
+  <li><a href="#three-ways-associations-arise" id="toc-three-ways-associations-arise" class="nav-link active" data-scroll-target="#three-ways-associations-arise">Three Ways Associations Arise</a>
   <ul class="collapse">
-  <li><a href="#structure-1-direct-causation" id="toc-structure-1-direct-causation" class="nav-link" data-scroll-target="#structure-1-direct-causation">Structure 1 — Direct Causation</a></li>
-  <li><a href="#structure-2-common-cause-confounding" id="toc-structure-2-common-cause-confounding" class="nav-link" data-scroll-target="#structure-2-common-cause-confounding">Structure 2 — Common Cause (Confounding)</a></li>
-  <li><a href="#structure-3-collider-bias-selection" id="toc-structure-3-collider-bias-selection" class="nav-link" data-scroll-target="#structure-3-collider-bias-selection">Structure 3 — Collider Bias (Selection)</a></li>
-  <li><a href="#simulation-1-which-world-are-we-in" id="toc-simulation-1-which-world-are-we-in" class="nav-link" data-scroll-target="#simulation-1-which-world-are-we-in">🔬 Simulation 1 — Which World Are We In?</a></li>
+  <li><a href="#reason-1-direct-causation" id="toc-reason-1-direct-causation" class="nav-link" data-scroll-target="#reason-1-direct-causation">Reason 1 — Direct Causation</a></li>
+  <li><a href="#reason-2-common-cause-confounding" id="toc-reason-2-common-cause-confounding" class="nav-link" data-scroll-target="#reason-2-common-cause-confounding">Reason 2 — Common Cause (Confounding)</a></li>
+  <li><a href="#reason-3-collider-bias" id="toc-reason-3-collider-bias" class="nav-link" data-scroll-target="#reason-3-collider-bias">Reason 3 — Collider Bias</a></li>
+  <li><a href="#simulation" id="toc-simulation" class="nav-link" data-scroll-target="#simulation">🔬 Simulation</a></li>
   </ul></li>
-  <li><a href="#part-ii-the-scale-problem-additive-vs.-multiplicative-worlds" id="toc-part-ii-the-scale-problem-additive-vs.-multiplicative-worlds" class="nav-link" data-scroll-target="#part-ii-the-scale-problem-additive-vs.-multiplicative-worlds">Part II — The Scale Problem: Additive vs.&nbsp;Multiplicative Worlds</a>
-  <ul class="collapse">
-  <li><a href="#why-the-scale-of-measurement-changes-everything" id="toc-why-the-scale-of-measurement-changes-everything" class="nav-link" data-scroll-target="#why-the-scale-of-measurement-changes-everything">Why the scale of measurement changes everything</a></li>
-  <li><a href="#simulation-2-does-the-scale-lie" id="toc-simulation-2-does-the-scale-lie" class="nav-link" data-scroll-target="#simulation-2-does-the-scale-lie">🔬 Simulation 2 — Does the Scale Lie?</a></li>
-  </ul></li>
-  <li><a href="#part-iii-putting-it-together-the-identification-problem" id="toc-part-iii-putting-it-together-the-identification-problem" class="nav-link" data-scroll-target="#part-iii-putting-it-together-the-identification-problem">Part III — Putting It Together: The Identification Problem</a></li>
-  <li><a href="#what-would-actually-help" id="toc-what-would-actually-help" class="nav-link" data-scroll-target="#what-would-actually-help">What Would Actually Help?</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
-  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -205,7 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div>
   <div class="description">
-    <p>A recent analysis found r = 0.92 between hypertrophy and strength gains. But high correlations have many parents — and causation is only one of them. This article uses interactive R simulations to show exactly how associations arise, and why they systematically mislead.</p>
+    <p>Correlations between changes in muscle size and strength vary wildly across studies — anywhere from near zero to above 0.9. But this variability tells us less about biology than we might think: the same training programme, run twice, can produce almost any correlation depending on who you recruit, how you measure change, and which causal forces happen to dominate in your sample. This article uses interactive simulations to show the three structural reasons associations arise — and why none of them, on their own, can tell us whether size actually causes strength.</p>
   </div>
 </div>
 
@@ -228,244 +239,123 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Greg Nuckols recently wrote a careful analysis of whether hypertrophy and strength gains are more strongly correlated than we previously thought. His conclusion — that within-person repeated-measures correlations of r ≈ 0.90 look impressive, but the between-person picture is far murkier — is exactly right. But I think the deeper problem is not <em>which</em> correlation coefficient we pick. It is that <strong>no correlation coefficient, however cleverly estimated, can answer the causal question</strong> we actually care about: does gaining muscle make you stronger?</p>
-<p>That question is causal. Correlations are not. The gap between those two things is not a pedantic statistical quibble — it produces completely different answers in practice, and this article will show you why, using interactive simulations you can run right here in your browser (no server required).</p>
-<p>We will work through three mechanisms that produce associations between variables that have nothing to do with one causing the other. Then we will add a second layer of trouble: even when we correctly identify that A causes B, our estimate of the effect’s size will depend entirely on whether the underlying biological process is additive or multiplicative — and which scale (absolute vs.&nbsp;percentage change) we happen to look at.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>How to read this article
+<span class="screen-reader-only">Tip</span>Key points
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Each section has an interactive simulation powered by R running directly in your browser via <a href="https://posit-dev.github.io/r-shinylive/">shinylive</a>. Adjust the sliders to change the true causal structure of a simulated world, and the plots show what a researcher would observe if they ran a correlation study in that world.</p>
+<ul>
+<li>Correlations between changes in muscle size and strength vary from near zero to above 0.9 across studies — and that variability is itself the problem, not the answer.</li>
+<li>A high correlation can emerge even when size has no causal effect on strength whatsoever, through at least three distinct structural mechanisms.</li>
+<li>Even when the causal effect is real, the correlation you observe depends heavily on choices made before the analysis — who you recruit, how you measure change, and what scale you report it on.</li>
+<li>Establishing that size <em>causes</em> strength requires a different framework entirely, which we introduce in Part II.</li>
+</ul>
 </div>
 </div>
+<p>You have probably heard that correlation is not causation. It is one of those phrases that gets repeated so often it has almost lost its meaning — a disclaimer people attach to findings before moving on to interpret them causally anyway. But if everyone knows this, why do we keep reaching for correlations when we want to understand whether muscle growth drives strength gains?</p>
+<p>I think the honest answer is that we are trying to answer a causal question and do not always know how to do it properly. Correlations are easy to compute, easy to report, and — crucially — easy to misread as evidence that one thing is causing another. The literature on muscle size and strength is a good example: observed correlations between changes in the two vary anywhere from near zero to above 0.9 across studies, and that variability itself is rarely treated as the puzzle it should be.</p>
+<p>The deeper problem is not which correlation we pick, or how cleverly we estimate it. It is that no correlation, however well-constructed, can answer the question we actually care about: does gaining muscle make you stronger?</p>
+<p>That question is causal. Correlations are not. This is not a philosophical distinction — it has real consequences for how we interpret training research and design interventions. In this article, we use interactive simulations to make those consequences concrete. We first show how a strong association between size and strength changes can emerge even when one has nothing to do with the other. We then show how, even in a world where size genuinely does cause strength, the number we report can change dramatically depending on choices that have nothing to do with the underlying biology.</p>
 <hr>
-<section id="part-i-three-ways-associations-arise" class="level2">
-<h2 class="anchored" data-anchor-id="part-i-three-ways-associations-arise">Part I — Three Ways Associations Arise</h2>
-<p>Every association between two variables — muscle size (S) and strength (F) — traces back to one of three causal structures. We can draw these with <strong>directed acyclic graphs (DAGs)</strong>: arrows represent direct causal effects; the absence of an arrow means no direct effect (conditional on everything else in the graph).</p>
-<section id="structure-1-direct-causation" class="level3">
-<h3 class="anchored" data-anchor-id="structure-1-direct-causation">Structure 1 — Direct Causation</h3>
-<pre><code>Training ──► Size (S) ──► Strength (F)
-                 ↑
-          (also Training ──► F directly, via neural adaptation)</code></pre>
-<p>Training causes muscle to grow, and that growth directly causes strength to increase. A correlation between ΔS and ΔF is telling you something real — but only that the effect <em>exists</em>, not how large it is relative to all other pathways.</p>
-</section>
-<section id="structure-2-common-cause-confounding" class="level3">
-<h3 class="anchored" data-anchor-id="structure-2-common-cause-confounding">Structure 2 — Common Cause (Confounding)</h3>
-<pre><code>         Training
-        ↙         ↘
-   Size (S)     Strength (F)
-        ↘         ↙
-     (spurious association)</code></pre>
-<p>Training causes <em>both</em> muscle growth and strength gains independently — through neural adaptations, tendon stiffness changes, motor learning. Size and strength will be correlated in any dataset, but removing the muscle growth (magically) would not reduce strength gains at all. <strong>The correlation is real; the causal interpretation is wrong.</strong></p>
-</section>
-<section id="structure-3-collider-bias-selection" class="level3">
-<h3 class="anchored" data-anchor-id="structure-3-collider-bias-selection">Structure 3 — Collider Bias (Selection)</h3>
-<pre><code>Size (S) ──►  Progress score  ◄── Strength (F)
-              (conditioning here…)
-              (…opens a spurious path between S and F)</code></pre>
-<p>Suppose a study retains only “good responders” — participants above a threshold on an overall progress metric that combines size and strength gains. Both contribute to that selection criterion. Conditioning on it — or restricting analysis to participants above the threshold — <strong>opens a spurious path</strong> between Size and Strength even if they have zero direct causal relationship. Within the selected group, those who grew more muscle appear to have gained more strength, simply because both had to be elevated to survive selection.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>The within-person correlation and confounding
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The within-person repeated-measures correlation celebrated by Marques et al. (2025) is actually <em>more</em> susceptible to the confounding story, not less. Within each person, muscle size and neural/tendon adaptations are both driven by the same training stimulus, on the same timeline, within the same body. A strong within-person track of both variables rising together is exactly what you would predict from the confounding DAG. It does not require direct causation.</p>
-</div>
-</div>
-<hr>
-</section>
-<section id="simulation-1-which-world-are-we-in" class="level3">
-<h3 class="anchored" data-anchor-id="simulation-1-which-world-are-we-in">🔬 Simulation 1 — Which World Are We In?</h3>
-<p>Use the controls below to set the strength of each causal pathway and choose a world type. Notice that even with the <strong>direct effect of size set to zero</strong>, you can observe r &gt; 0.4 in the confounding world — and an association appears from nothing in the collider world the moment you restrict to high-progress participants.</p>
-<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
-#|   shinylive does not work in self-contained HTML documents.
-#|   Please set `embed-resources: false` in your metadata.
-#| standalone: true
-#| viewerHeight: 580
-
-library(shiny)
-library(ggplot2)
-
-ui &lt;- fluidPage(
-  tags$style(HTML("
-    body { font-family: 'Helvetica Neue', sans-serif; font-size: 13px; }
-    .well { background: #f8f8f8; border: 1px solid #ddd; padding: 12px; }
-    h4 { font-size: 13px; font-weight: 700; text-transform: uppercase;
-         letter-spacing: 0.08em; color: #2c6e8a; margin-bottom: 10px; }
-    .stat-label { font-size: 11px; color: #777; text-transform: uppercase;
-                  letter-spacing: 0.1em; }
-    .stat-value { font-size: 1.4rem; font-weight: 700; color: #2c6e8a; }
-  ")),
-  fluidRow(
-    column(4,
-      wellPanel(
-        h4("World type"),
-        radioButtons("world", NULL,
-          choices = c(
-            "Direct causation"   = "direct",
-            "Confounding"        = "confound",
-            "Collider / Selection" = "collider"
-          ), selected = "direct"
-        ),
-        hr(),
-        h4("Parameters"),
-        sliderInput("trainSize", "Training → Size",
-                    min=0, max=1, value=0.7, step=0.05),
-        sliderInput("sizeStr",   "Size → Strength (direct effect)",
-                    min=0, max=1, value=0.5, step=0.05),
-        sliderInput("trainStr",  "Training → Strength (neural / direct)",
-                    min=0, max=1, value=0.4, step=0.05),
-        sliderInput("noise",     "Noise",
-                    min=0.05, max=1, value=0.4, step=0.05),
-        sliderInput("n",         "N (participants)",
-                    min=50, max=500, value=200, step=50),
-        actionButton("resample", "Resample", class="btn btn-primary btn-sm")
-      )
-    ),
-    column(8,
-      plotOutput("scatter", height="320px"),
-      fluidRow(
-        column(4, div(class="stat-label", "Observed r(ΔSize, ΔStrength)"),
-                  div(class="stat-value", textOutput("r_obs", inline=TRUE))),
-        column(4, div(class="stat-label", "Causal share of variance"),
-                  div(class="stat-value", textOutput("r_causal", inline=TRUE))),
-        column(4, div(class="stat-label", "World"),
-                  div(class="stat-value", textOutput("world_label", inline=TRUE)))
-      ),
-      hr(),
-      p(style="font-size:12px;color:#777;",
-        "Red points: selected participants (collider world only). ",
-        "Dashed line: OLS regression. Shaded band: 95% CI.")
-    )
-  )
-)
-
-server &lt;- function(input, output, session) {
-  set.seed(NULL)
-
-  dat &lt;- reactive({
-    input$resample
-    n   &lt;- input$n
-    b_ts &lt;- input$trainSize
-    b_sf &lt;- input$sizeStr
-    b_tf &lt;- input$trainStr
-    sig  &lt;- input$noise
-    training &lt;- rnorm(n)
-
-    if (input$world == "direct") {
-      dS &lt;- b_ts * training + sig * rnorm(n)
-      dF &lt;- b_sf * dS + b_tf * training + sig * rnorm(n)
-      selected &lt;- rep(TRUE, n)
-    } else if (input$world == "confound") {
-      dS &lt;- b_ts * training + sig * rnorm(n)
-      dF &lt;- b_tf * training + sig * rnorm(n)   # no size → strength
-      selected &lt;- rep(TRUE, n)
-    } else {
-      # collider: size and strength from independent causes
-      dS &lt;- b_ts * rnorm(n) + sig * rnorm(n)
-      dF &lt;- b_tf * rnorm(n) + sig * rnorm(n)
-      score    &lt;- dS + dF
-      threshold &lt;- quantile(score, 0.40)
-      selected &lt;- score &gt;= threshold
-    }
-    data.frame(dS=dS, dF=dF, selected=selected)
-  })
-
-  output$scatter &lt;- renderPlot({
-    d &lt;- dat()
-    d_plot &lt;- if (input$world == "collider") d[d$selected, ] else d
-
-    r_val &lt;- cor(d_plot$dS, d_plot$dF)
-
-    ggplot(d_plot, aes(x=dS, y=dF)) +
-      geom_point(
-        aes(colour = if(input$world=="collider") "Selected" else "All"),
-        alpha=0.45, size=2
-      ) +
-      geom_smooth(method="lm", se=TRUE, colour="#c0392b",
-                  fill="#e74c3c", alpha=0.15, linetype="dashed", linewidth=0.8) +
-      scale_colour_manual(values=c("All"="#2c6e8a","Selected"="#c0392b"),
-                          guide="none") +
-      labs(
-        x = "Δ Muscle size", y = "Δ Strength",
-        title = sprintf("Observed r = %.2f", r_val)
-      ) +
-      theme_minimal(base_size=13) +
-      theme(plot.title = element_text(face="bold", colour="#1a1a1a"))
-  })
-
-  output$r_obs &lt;- renderText({
-    d &lt;- dat()
-    d_plot &lt;- if (input$world == "collider") d[d$selected, ] else d
-    sprintf("%.2f", cor(d_plot$dS, d_plot$dF))
-  })
-
-  output$r_causal &lt;- renderText({
-    if (input$world == "direct") {
-      total &lt;- input$sizeStr^2 + input$trainStr^2 + input$noise^2 + 1e-4
-      sprintf("%.0f%%", 100 * input$sizeStr^2 / total)
-    } else if (input$world == "confound") {
-      "0% (none)"
-    } else {
-      "Undefined"
-    }
-  })
-
-  output$world_label &lt;- renderText({
-    switch(input$world,
-      direct   = "Direct cause",
-      confound = "Confounding",
-      collider = "Collider"
-    )
-  })
-}
-
-shinyApp(ui, server)</code></pre>
+<section id="three-ways-associations-arise" class="level2">
+<h2 class="anchored" data-anchor-id="three-ways-associations-arise">Three Ways Associations Arise</h2>
 <blockquote class="blockquote">
-<p><strong>Key insight:</strong> In the confounding world, set <em>Size → Strength</em> to <strong>0</strong> and watch the correlation remain comfortably above r = 0.3–0.5, driven entirely by training as a shared cause. In the collider world, Size and Strength are generated <em>independently</em> — yet restricting to the top 60% of progress scores conjures an association from nothing.</p>
+<p><strong>Association:</strong> two variables are associated if information about one tells you something about the likelihood of the other. A correlation coefficient measures this. It says nothing about why.</p>
 </blockquote>
+<p>Every systematic association between muscle size (<span class="math inline">\(M\)</span>) and strength (<span class="math inline">\(S\)</span>) traces back to one of three causal structures — or, in small samples, to chance alone <span class="citation" data-cites="hernanCausalInferenceWhat2026">Hernan and Robins (<a href="#ref-hernanCausalInferenceWhat2026" role="doc-biblioref">2026</a>)</span>. We can represent these structures with <strong>directed acyclic graphs (DAGs)</strong>, where an arrow from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> means “<span class="math inline">\(A\)</span> is a cause of <span class="math inline">\(B\)</span>.” No arrow means no direct causal relationship. What makes DAGs useful is that they let us read off, just from the diagram, which variables we would expect to be associated — and why. Below we walk through each scenario in turn.</p>
+<section id="reason-1-direct-causation" class="level3">
+<h3 class="anchored" data-anchor-id="reason-1-direct-causation">Reason 1 — Direct Causation</h3>
+<div class="dag-figure">
+<svg viewbox="0 0 360 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="d1a" markerwidth="8" markerheight="6" refx="7" refy="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-arr-fill"></polygon>
+    </marker>
+  </defs>
+  <rect x="20" y="34" width="148" height="52" rx="6" class="dag-node"></rect>
+  <text x="94" y="54" text-anchor="middle" class="dag-lbl-cat">MUSCLE SIZE</text>
+  <text x="94" y="74" text-anchor="middle" class="dag-lbl-var">M</text>
+  <rect x="192" y="34" width="148" height="52" rx="6" class="dag-node"></rect>
+  <text x="266" y="54" text-anchor="middle" class="dag-lbl-cat">STRENGTH</text>
+  <text x="266" y="74" text-anchor="middle" class="dag-lbl-var">S</text>
+  <line x1="169" y1="60" x2="190" y2="60" class="dag-arrow" marker-end="url(#d1a)"></line>
+</svg>
+<div class="dag-caption">M = Muscle Size · S = Strength</div>
+</div>
+<p>In this scenario, muscle growth directly causes strength to increase. This is what we would generally expect: when one variable has a causal effect on another, we should also expect the two to be associated. A correlation between <span class="math inline">\(\Delta M\)</span> and <span class="math inline">\(\Delta S\)</span> is therefore telling you something real — the two are linked because one drives the other.</p>
+<p>A helpful way to think about DAGs is to imagine the arrows as pipes through which association can flow. If two variables are connected by a pipe, they will tend to move together. In this scenario, M and S are connected by a single direct pipe — so when M goes up, S tends to go up too. The trouble, as we will see, is that pipes can carry association between variables even when neither causes the other.</p>
+</section>
+<section id="reason-2-common-cause-confounding" class="level3">
+<h3 class="anchored" data-anchor-id="reason-2-common-cause-confounding">Reason 2 — Common Cause (Confounding)</h3>
+<div class="dag-figure">
+<svg viewbox="0 0 660 238" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="d2a" markerwidth="8" markerheight="6" refx="7" refy="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-arr-fill"></polygon>
+    </marker>
+  </defs>
+  <rect x="255" y="20" width="150" height="52" rx="6" class="dag-node"></rect>
+  <text x="330" y="40" text-anchor="middle" class="dag-lbl-cat">TRAINING</text>
+  <text x="330" y="59" text-anchor="middle" class="dag-lbl-var">T</text>
+  <rect x="50" y="158" width="148" height="52" rx="6" class="dag-node"></rect>
+  <text x="124" y="177" text-anchor="middle" class="dag-lbl-cat">MUSCLE SIZE</text>
+  <text x="124" y="196" text-anchor="middle" class="dag-lbl-var">M</text>
+  <rect x="462" y="158" width="148" height="52" rx="6" class="dag-node"></rect>
+  <text x="536" y="177" text-anchor="middle" class="dag-lbl-cat">STRENGTH</text>
+  <text x="536" y="196" text-anchor="middle" class="dag-lbl-var">S</text>
+  <line x1="292" y1="72" x2="170" y2="156" class="dag-arrow" marker-end="url(#d2a)"></line>
+  <line x1="368" y1="72" x2="490" y2="156" class="dag-arrow" marker-end="url(#d2a)"></line>
+  <path d="M198,184 Q330,214 462,184" class="dag-spurious"></path>
+  <text x="330" y="226" text-anchor="middle" class="dag-lbl-note">SPURIOUS ASSOCIATION</text>
+</svg>
+<div class="dag-caption">T drives both M and S independently — their correlation carries no causal meaning</div>
+</div>
+<p>In this scenario, neither M nor S causes the other. Instead, both are driven by a common cause — training. Because both variables share the same upstream cause, they will tend to move together in any dataset, even without a direct connection between them.</p>
+<p>This means that if you learn someone gained a lot of muscle over a training block, you would reasonably update your expectation of their strength gains upward — not because muscle caused the strength gain, but because both are downstream of the same training stimulus. A correlation between <span class="math inline">\(\Delta M\)</span> and <span class="math inline">\(\Delta S\)</span> will appear, and it may be substantial, even when the direct effect of M on S is exactly zero.</p>
+</section>
+<section id="reason-3-collider-bias" class="level3">
+<h3 class="anchored" data-anchor-id="reason-3-collider-bias">Reason 3 — Collider Bias</h3>
+<div class="dag-figure">
+<svg viewbox="0 0 660 185" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="d3a" markerwidth="8" markerheight="6" refx="7" refy="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-arr-fill"></polygon>
+    </marker>
+    <marker id="d3b" markerwidth="8" markerheight="6" refx="7" refy="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" class="dag-spu-fill"></polygon>
+    </marker>
+  </defs>
+  <rect x="20" y="46" width="148" height="52" rx="6" class="dag-node"></rect>
+  <text x="94" y="66" text-anchor="middle" class="dag-lbl-cat">MUSCLE SIZE</text>
+  <text x="94" y="85" text-anchor="middle" class="dag-lbl-var">M</text>
+  <rect x="248" y="40" width="164" height="64" rx="9" class="dag-node-ring"></rect>
+  <text x="330" y="34" text-anchor="middle" class="dag-lbl-cond">CONDITIONED ON</text>
+  <rect x="256" y="46" width="148" height="52" rx="6" class="dag-node-alt"></rect>
+  <text x="330" y="64" text-anchor="middle" class="dag-lbl-cat">PROGRESS SCORE</text>
+  <text x="330" y="85" text-anchor="middle" class="dag-lbl-var">P</text>
+  <rect x="492" y="46" width="148" height="52" rx="6" class="dag-node"></rect>
+  <text x="566" y="66" text-anchor="middle" class="dag-lbl-cat">STRENGTH</text>
+  <text x="566" y="85" text-anchor="middle" class="dag-lbl-var">S</text>
+  <line x1="169" y1="72" x2="254" y2="72" class="dag-arrow" marker-end="url(#d3a)"></line>
+  <line x1="492" y1="72" x2="406" y2="72" class="dag-arrow" marker-end="url(#d3a)"></line>
+  <path d="M94,98 C94,150 566,150 566,98" class="dag-spurious" marker-end="url(#d3b)"></path>
+  <text x="330" y="165" text-anchor="middle" class="dag-lbl-note">SPURIOUS PATH · OPENS WHEN CONDITIONING ON P</text>
+</svg>
+<div class="dag-caption">P is a collider — both M and S cause P, so conditioning on P opens a spurious path between them</div>
+</div>
+<p>In this scenario, M and S are again causally unrelated — and unlike Scenario 2, they do not even share a common cause. Both independently influence a third variable: whether a participant completes the study. Someone who gained little muscle might still complete the programme because their strength progressed well enough to keep them motivated, and vice versa. Study completion is therefore a common <em>effect</em> of both M and S — a collider.</p>
+<p>Here is the key insight: in the full population, M and S are independent. Learning that someone gained a lot of muscle tells you nothing about their strength gains, because there is no pipe connecting them — the only path runs through the collider, and colliders, unlike common causes, <em>block</em> the flow of association rather than transmitting it.</p>
+<p>But the moment we restrict our analysis to completers — conditioning on the collider — that blockage disappears. Within completers, those who gained little muscle must have gained more strength to make the cut, and those who gained little strength must have gained more muscle. A spurious association between M and S appears entirely as an artefact of who ended up in the analysed sample, not because of anything happening biologically between the two variables.</p>
 <hr>
 </section>
-</section>
-<section id="part-ii-the-scale-problem-additive-vs.-multiplicative-worlds" class="level2">
-<h2 class="anchored" data-anchor-id="part-ii-the-scale-problem-additive-vs.-multiplicative-worlds">Part II — The Scale Problem: Additive vs.&nbsp;Multiplicative Worlds</h2>
-<p>Suppose we grant, for the sake of argument, that muscle size truly causes strength — Structure 1 is the true DAG. We would still face a second, independent problem: <strong>we do not know the functional form of the biological relationship.</strong></p>
-<p>Consider two hypothetical worlds:</p>
-<p><strong>World A — Additive:</strong> Each additional cm³ of muscle adds the same absolute number of Newtons, regardless of starting size. The relationship between ΔSize and ΔStrength is linear on absolute scales.</p>
-<p><strong>World B — Multiplicative:</strong> Each additional cm³ of muscle adds the same <em>percentage</em> of current force production. Somebody who starts stronger gains more absolute Newtons from the same volume growth than somebody who starts weaker.</p>
-<p>Both are biologically plausible — the truth is probably somewhere between them. But they have radically different implications for what a correlation study shows, depending on which scale the researcher chooses.</p>
-<section id="why-the-scale-of-measurement-changes-everything" class="level3">
-<h3 class="anchored" data-anchor-id="why-the-scale-of-measurement-changes-everything">Why the scale of measurement changes everything</h3>
-<p>Researchers routinely express both hypertrophy and strength gains as <em>percentage changes</em> from baseline — partly for comparability. But in a multiplicative world, percentage changes on both sides correlate strongly with each other even if the absolute relationship is noisy. In an additive world, using percentage changes introduces a spurious association driven by baseline values: someone who starts small gains a large percentage from a small absolute gain, while a large person’s identical absolute gain registers as a small percentage. The correlation you observe is partly about the biology, and partly about where your participants happened to start.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>The Marques et al.&nbsp;r = 0.92 through this lens
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The within-person r = 0.92 uses percentage changes as the outcome. In a multiplicative world with within-person comparison (which is <em>guaranteed</em> — each person is compared to themselves), baseline-size noise that would inflate the percentage-change correlation between subjects is already perfectly controlled. The high r is more informative about the <strong>data structure</strong> than about the causal magnitude.</p>
-</div>
-</div>
-<hr>
-</section>
-<section id="simulation-2-does-the-scale-lie" class="level3">
-<h3 class="anchored" data-anchor-id="simulation-2-does-the-scale-lie">🔬 Simulation 2 — Does the Scale Lie?</h3>
-<p>200 participants with varying baseline muscle size and strength. Toggle between an additive and multiplicative world, then compare the correlations on absolute vs.&nbsp;percentage-change scales. Slide <em>baseline variability</em> up to see the discrepancy grow.</p>
+<section id="simulation" class="level3">
+<h3 class="anchored" data-anchor-id="simulation">🔬 Simulation</h3>
+<p>The simulation below generates data from three different causal worlds. Rather than letting you dial in arbitrary values, we have pre-set the parameters to reflect realistic scenarios grounded in the resistance training literature. Click a scenario to load it, then hit <strong>Resample</strong> to build intuition across repeated draws from the same world.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
@@ -474,372 +364,376 @@ shinyApp(ui, server)</code></pre>
 
 library(shiny)
 library(ggplot2)
-library(patchwork)
+
+# ── Dark theme for ggplot ──────────────────────────────────────
+theme_dark_custom &lt;- function() {
+  theme_minimal(base_size = 13) +
+    theme(
+      plot.background    = element_rect(fill = "#1e1e1e", colour = NA),
+      panel.background   = element_rect(fill = "#1e1e1e", colour = NA),
+      panel.grid.major   = element_line(colour = "#333333"),
+      panel.grid.minor   = element_line(colour = "#2a2a2a"),
+      axis.text          = element_text(colour = "#aaaaaa"),
+      axis.title         = element_text(colour = "#cccccc"),
+      plot.title         = element_text(colour = "#ffffff", face = "bold",
+                                        size = 14),
+      plot.subtitle      = element_text(colour = "#aaaaaa", size = 11),
+      legend.background  = element_rect(fill = "#1e1e1e", colour = NA),
+      legend.text        = element_text(colour = "#aaaaaa"),
+      legend.title       = element_text(colour = "#cccccc")
+    )
+}
+
+# ── Presets ────────────────────────────────────────────────────
+presets &lt;- list(
+  direct = list(
+    b_ts = 0.60, b_sf = 0.55, b_tf = 0.30, sig = 0.35,
+    label = "Scenario 1 — Direct causation",
+    subtitle = "Size → Strength effect is active. Training also drives strength directly, but size plays a meaningful causal role."
+  ),
+  confound = list(
+    b_ts = 0.30, b_sf = 0.00, b_tf = 0.90, sig = 0.40,
+    label = "Scenario 2 — Confounding",
+    subtitle = "Size → Strength is zero. Training drives both independently. Based on typical effect sizes in resistance training studies."
+  ),
+  collider = list(
+    b_ts = NA, b_sf = NA, b_tf = NA, sig = NA,
+    label = "Scenario 3 — Collider (Powerlifting selection)",
+    subtitle = "M and S are independent. Only athletes strong AND muscular enough to compete appear in the dataset."
+  )
+)
 
 ui &lt;- fluidPage(
-  tags$style(HTML("
-    body { font-family: 'Helvetica Neue', sans-serif; font-size:13px; }
-    .well { background:#f8f8f8; border:1px solid #ddd; padding:12px; }
-    h4 { font-size:13px; font-weight:700; text-transform:uppercase;
-         letter-spacing:0.08em; color:#2c6e8a; margin-bottom:10px; }
-    .stat-label { font-size:11px; color:#777; text-transform:uppercase; letter-spacing:.1em; }
-    .stat-value { font-size:1.3rem; font-weight:700; }
-  ")),
+  tags$head(tags$style(HTML("
+    body, .container-fluid {
+      background-color: #1e1e1e !important;
+      color: #cccccc !important;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 13px;
+    }
+    .well {
+      background-color: #2a2a2a !important;
+      border: 1px solid #3a3a3a !important;
+      color: #cccccc !important;
+    }
+    h4 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #5b9ec9;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 10px;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #5b9ec9;
+    }
+    .stat-value.green { color: #4caf82; }
+    .stat-value.red   { color: #e05c5c; }
+    .preset-btn {
+      display: block;
+      width: 100%;
+      margin-bottom: 8px;
+      text-align: left;
+      background-color: #2f2f2f;
+      border: 1px solid #444;
+      color: #cccccc;
+      padding: 8px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .preset-btn:hover  { background-color: #3a3a3a; border-color: #5b9ec9; }
+    .preset-btn.active { background-color: #1a3a52; border-color: #5b9ec9;
+                         color: #ffffff; }
+    .scenario-subtitle {
+      font-size: 11px;
+      color: #888;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+    hr { border-color: #333; }
+    label { color: #aaaaaa !important; }
+    .irs--shiny .irs-bar      { background: #5b9ec9; border-color: #5b9ec9; }
+    .irs--shiny .irs-handle   { border-color: #5b9ec9; }
+    .irs--shiny .irs-from,
+    .irs--shiny .irs-to,
+    .irs--shiny .irs-single   { background: #5b9ec9; }
+    .irs--shiny .irs-line     { background: #444; border-color: #444; }
+    .irs--shiny .irs-grid-text { color: #666; }
+    .btn-primary {
+      background-color: #5b9ec9 !important;
+      border-color: #5b9ec9 !important;
+      color: #fff !important;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .btn-primary:hover { background-color: #4a8ab5 !important; }
+    .note-text {
+      font-size: 11px;
+      color: #666;
+      margin-top: 8px;
+    }
+  "))),
+
   fluidRow(
+    # ── Left panel ──────────────────────────────────────────────
     column(4,
       wellPanel(
-        h4("Data-generating world"),
-        radioButtons("dgp", NULL,
-          choices=c("Additive"="additive","Multiplicative"="multiplicative"),
-          selected="additive"),
+        h4("Choose a scenario"),
+        tags$button("Scenario 1 — Direct causation",
+                    id = "btn_direct",
+                    class = "preset-btn active",
+                    onclick = "Shiny.setInputValue('preset', 'direct',
+                               {priority: 'event'})"),
+        tags$button("Scenario 2 — Confounding",
+                    id = "btn_confound",
+                    class = "preset-btn",
+                    onclick = "Shiny.setInputValue('preset', 'confound',
+                               {priority: 'event'})"),
+        tags$button("Scenario 3 — Collider / Selection",
+                    id = "btn_collider",
+                    class = "preset-btn",
+                    onclick = "Shiny.setInputValue('preset', 'collider',
+                               {priority: 'event'})"),
         hr(),
         h4("Parameters"),
-        sliderInput("beta",    "True causal effect (β)",
-                    min=0, max=1, value=0.5, step=0.05),
-        sliderInput("baseVar", "Baseline variability",
-                    min=0.1, max=1, value=0.5, step=0.05),
-        sliderInput("noise2",  "Noise",
-                    min=0.05, max=1, value=0.3, step=0.05),
-        sliderInput("n2",      "N",
-                    min=50, max=500, value=200, step=50),
-        actionButton("resample2","Resample",class="btn btn-primary btn-sm")
+        uiOutput("scenario_subtitle"),
+        sliderInput("b_ts", "Training → Size",
+                    min=0, max=1, value=0.60, step=0.05),
+        sliderInput("b_sf", "Size → Strength",
+                    min=0, max=1, value=0.55, step=0.05),
+        sliderInput("b_tf", "Training → Strength (direct)",
+                    min=0, max=1, value=0.30, step=0.05),
+        sliderInput("sig",  "Noise",
+                    min=0.05, max=1, value=0.35, step=0.05),
+        sliderInput("n",    "N (participants)",
+                    min=50, max=600, value=200, step=50),
+        actionButton("resample", "Resample",
+                     class = "btn btn-primary btn-sm")
       )
     ),
+
+    # ── Right panel ─────────────────────────────────────────────
     column(8,
-      plotOutput("two_plots", height="340px"),
-      hr(),
+      plotOutput("scatter", height = "340px"),
       fluidRow(
-        column(3,
-          div(class="stat-label","r (absolute)"),
-          div(class="stat-value",style="color:#2c6e8a",textOutput("r_abs",inline=TRUE))
+        column(4,
+          div(class="stat-label", "Observed r"),
+          div(class="stat-value", textOutput("r_obs", inline=TRUE))
         ),
-        column(3,
-          div(class="stat-label","r (percentage)"),
-          div(class="stat-value",style="color:#2d7d46",textOutput("r_pct",inline=TRUE))
+        column(4,
+          div(class="stat-label", "Causal share of variance"),
+          uiOutput("causal_share")
         ),
-        column(3,
-          div(class="stat-label","|r_abs − r_pct|"),
-          div(class="stat-value",style="color:#c0392b",textOutput("r_gap",inline=TRUE))
-        ),
-        column(3,
-          div(class="stat-label","True β"),
-          div(class="stat-value",style="color:#555",textOutput("beta_out",inline=TRUE))
+        column(4,
+          div(class="stat-label", "Active scenario"),
+          div(class="stat-value", style="font-size:1rem",
+              textOutput("world_label", inline=TRUE))
         )
       ),
-      p(style="font-size:12px;color:#777;margin-top:10px;",
-        "The gap between the two correlations is entirely an artefact of scale choice — ",
-        "not a change in the underlying biology.")
+      div(class="note-text",
+        "Collider world: grey points = full population (M and S independent); ",
+        "red points = athletes who made it into the dataset. ",
+        "Regression line fitted to red points only."
+      )
     )
-  )
+  ),
+
+  # ── Button highlight JS ──────────────────────────────────────
+  tags$script(HTML("
+    Shiny.addCustomMessageHandler('highlight_btn', function(id) {
+      ['btn_direct','btn_confound','btn_collider'].forEach(function(b) {
+        document.getElementById(b).classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    });
+  "))
 )
 
 server &lt;- function(input, output, session) {
 
-  sim2 &lt;- reactive({
-    input$resample2
-    n   &lt;- input$n2
-    b   &lt;- input$beta
-    bv  &lt;- input$baseVar
-    sig &lt;- input$noise2
+  current_world &lt;- reactiveVal("direct")
 
-    S0  &lt;- pmax(0.2, 1 + bv * rnorm(n))
-    F0  &lt;- pmax(0.2, 1 + bv * rnorm(n))
+  # Load preset when button clicked
+  observeEvent(input$preset, {
+    p &lt;- presets[[input$preset]]
+    current_world(input$preset)
+    session$sendCustomMessage("highlight_btn", paste0("btn_", input$preset))
 
-    dS_abs &lt;- pmax(0.01, 0.1 + 0.05 * rnorm(n) + sig * 0.03 * rnorm(n))
+    if (input$preset != "collider") {
+      updateSliderInput(session, "b_ts", value = p$b_ts)
+      updateSliderInput(session, "b_sf", value = p$b_sf)
+      updateSliderInput(session, "b_tf", value = p$b_tf)
+      updateSliderInput(session, "sig",  value = p$sig)
+    }
+  })
 
-    if (input$dgp == "additive") {
-      dF_abs &lt;- b * dS_abs + sig * 0.08 * rnorm(n)
+  output$scenario_subtitle &lt;- renderUI({
+    p &lt;- presets[[current_world()]]
+    div(class="scenario-subtitle", p$subtitle)
+  })
+
+  # ── Data generation ──────────────────────────────────────────
+  dat &lt;- reactive({
+    input$resample
+    input$preset
+    n    &lt;- input$n
+    b_ts &lt;- input$b_ts
+    b_sf &lt;- input$b_sf
+    b_tf &lt;- input$b_tf
+    sig  &lt;- input$sig
+    world &lt;- current_world()
+
+    if (world == "direct") {
+      training &lt;- rnorm(n)
+      dM &lt;- b_ts * training + sig * rnorm(n)
+      dS &lt;- b_sf * dM + b_tf * training + sig * rnorm(n)
+      selected &lt;- rep(TRUE, n)
+
+    } else if (world == "confound") {
+      training &lt;- rnorm(n)
+      dM &lt;- b_ts * training + sig * rnorm(n)
+      dS &lt;- b_tf * training + sig * rnorm(n)   # M → S path is zero
+      selected &lt;- rep(TRUE, n)
+
     } else {
-      pct_s  &lt;- dS_abs / S0
-      pct_f  &lt;- b * pct_s + sig * 0.05 * rnorm(n)
-      dF_abs &lt;- pct_f * F0
+      # Collider: powerlifting selection
+      # M and S are generated independently
+      # Both contribute to "making it" as a competitive powerlifter
+      dM &lt;- rnorm(n)
+      dS &lt;- rnorm(n)
+      # Selection score: high muscle AND high strength → compete
+      logit_select &lt;- 1.2 * dM + 1.2 * dS - 0.5 + 0.4 * rnorm(n)
+      prob_select  &lt;- 1 / (1 + exp(-logit_select))
+      selected     &lt;- runif(n) &lt; prob_select
     }
 
-    data.frame(
-      dS_abs = dS_abs,
-      dF_abs = dF_abs,
-      pct_dS = dS_abs / S0,
-      pct_dF = dF_abs / pmax(0.01, F0)
-    )
+    data.frame(dM=dM, dS=dS, selected=selected)
   })
 
-  output$two_plots &lt;- renderPlot({
-    d &lt;- sim2()
-    r_abs &lt;- cor(d$dS_abs, d$dF_abs)
-    r_pct &lt;- cor(d$pct_dS, d$pct_dF)
+  # ── Plot ─────────────────────────────────────────────────────
+  output$scatter &lt;- renderPlot({
+    d     &lt;- dat()
+    world &lt;- current_world()
 
-    p1 &lt;- ggplot(d, aes(dS_abs, dF_abs)) +
-      geom_point(colour="#2c6e8a", alpha=0.35, size=1.8) +
-      geom_smooth(method="lm", se=TRUE, colour="#c0392b",
-                  fill="#e74c3c", alpha=0.12, linetype="dashed", linewidth=0.8) +
-      labs(x="Δ Size (absolute)", y="Δ Strength (absolute)",
-           title=sprintf("Absolute  —  r = %.2f", r_abs)) +
-      theme_minimal(base_size=12) +
-      theme(plot.title=element_text(face="bold", colour="#2c6e8a"))
+    if (world == "collider") {
+      d_sel   &lt;- d[d$selected,  ]
+      d_unsel &lt;- d[!d$selected, ]
+      r_val   &lt;- if (nrow(d_sel) &gt; 2) cor(d_sel$dM, d_sel$dS) else NA
 
-    p2 &lt;- ggplot(d, aes(pct_dS, pct_dF)) +
-      geom_point(colour="#2d7d46", alpha=0.35, size=1.8) +
-      geom_smooth(method="lm", se=TRUE, colour="#c0392b",
-                  fill="#e74c3c", alpha=0.12, linetype="dashed", linewidth=0.8) +
-      labs(x="% Δ Size", y="% Δ Strength",
-           title=sprintf("Percentage  —  r = %.2f", r_pct)) +
-      theme_minimal(base_size=12) +
-      theme(plot.title=element_text(face="bold", colour="#2d7d46"))
+      ggplot() +
+        geom_point(data=d_unsel, aes(x=dM, y=dS),
+                   colour="#555555", alpha=0.25, size=1.5) +
+        geom_point(data=d_sel, aes(x=dM, y=dS),
+                   colour="#e05c5c", alpha=0.55, size=2) +
+        geom_smooth(data=d_sel, aes(x=dM, y=dS),
+                    method="lm", se=TRUE,
+                    colour="#e05c5c", fill="#e05c5c",
+                    alpha=0.15, linetype="dashed", linewidth=0.9) +
+        labs(
+          x = "Muscle size (M)",
+          y = "Strength (S)",
+          title = sprintf("Observed r = %.2f  (selected only)",
+                          ifelse(is.na(r_val), NA, r_val)),
+          subtitle = sprintf("N total = %d  |  N selected (competing) = %d  |  N excluded = %d",
+                             nrow(d), sum(d$selected), sum(!d$selected))
+        ) +
+        theme_dark_custom()
 
-    p1 + p2
+    } else {
+      r_val &lt;- cor(d$dM, d$dS)
+      ggplot(d, aes(x=dM, y=dS)) +
+        geom_point(colour="#5b9ec9", alpha=0.40, size=1.8) +
+        geom_smooth(method="lm", se=TRUE,
+                    colour="#e05c5c", fill="#e05c5c",
+                    alpha=0.15, linetype="dashed", linewidth=0.9) +
+        labs(
+          x = "Δ Muscle size (M)",
+          y = "Δ Strength (S)",
+          title = sprintf("Observed r = %.2f", r_val),
+          subtitle = sprintf("N = %d", nrow(d))
+        ) +
+        theme_dark_custom()
+    }
+  }, bg="#1e1e1e")
+
+  # ── Stats ─────────────────────────────────────────────────────
+  output$r_obs &lt;- renderText({
+    d     &lt;- dat()
+    world &lt;- current_world()
+    d_plot &lt;- if (world == "collider") d[d$selected, ] else d
+    if (nrow(d_plot) &lt; 3) return("—")
+    sprintf("%.2f", cor(d_plot$dM, d_plot$dS))
   })
 
-  output$r_abs  &lt;- renderText({ d&lt;-sim2(); sprintf("%.2f", cor(d$dS_abs,d$dF_abs)) })
-  output$r_pct  &lt;- renderText({ d&lt;-sim2(); sprintf("%.2f", cor(d$pct_dS,d$pct_dF)) })
-  output$r_gap  &lt;- renderText({
-    d&lt;-sim2()
-    sprintf("%.2f", abs(cor(d$dS_abs,d$dF_abs) - cor(d$pct_dS,d$pct_dF)))
-  })
-  output$beta_out &lt;- renderText({ sprintf("%.2f", input$beta) })
-}
-
-shinyApp(ui, server)</code></pre>
-<blockquote class="blockquote">
-<p>In the <strong>additive world</strong>, push baseline variability to 0.8 and watch the percentage-change correlation diverge from the absolute one — the two are measuring different things. In the <strong>multiplicative world</strong>, the roles reverse. The biology did not change; only the analyst’s choice of scale did.</p>
-</blockquote>
-<hr>
-</section>
-</section>
-<section id="part-iii-putting-it-together-the-identification-problem" class="level2">
-<h2 class="anchored" data-anchor-id="part-iii-putting-it-together-the-identification-problem">Part III — Putting It Together: The Identification Problem</h2>
-<p>Even if we know the true causal structure <em>and</em> the correct scale, a further problem remains: <strong>a wide range of true causal worlds can produce the same observed correlation.</strong> The simulation below lets you adjust all parameters simultaneously. The grey band marks r ∈ [0.85, 0.95] — roughly what Marques et al.&nbsp;observed. See how many distinct causal configurations land inside it.</p>
-<pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
-#|   shinylive does not work in self-contained HTML documents.
-#|   Please set `embed-resources: false` in your metadata.
-#| standalone: true
-#| viewerHeight: 600
-
-library(shiny)
-library(ggplot2)
-
-ui &lt;- fluidPage(
-  tags$style(HTML("
-    body { font-family:'Helvetica Neue',sans-serif; font-size:13px; }
-    .well { background:#f8f8f8; border:1px solid #ddd; padding:12px; }
-    h4 { font-size:13px; font-weight:700; text-transform:uppercase;
-         letter-spacing:.08em; color:#2c6e8a; margin-bottom:10px; }
-    .stat-label { font-size:11px; color:#777; text-transform:uppercase; letter-spacing:.1em; }
-    .stat-value { font-size:1.3rem; font-weight:700; }
-    #target_msg { font-weight:700; font-size:1rem; padding:6px 12px; border-radius:3px; }
-  ")),
-  fluidRow(
-    column(4,
-      wellPanel(
-        h4("Causal structure"),
-        sliderInput("s3_direct", "Direct effect: Size → Strength",
-                    min=0, max=1, value=0.4, step=0.05),
-        sliderInput("s3_common", "Common cause: Training → both",
-                    min=0, max=1, value=0.6, step=0.05),
-        h4("Measurement"),
-        sliderInput("s3_scale",  "Scale (0 = absolute, 1 = % change)",
-                    min=0, max=1, value=1.0, step=0.05),
-        sliderInput("s3_bv",     "Baseline variability",
-                    min=0.1, max=1, value=0.5, step=0.05),
-        h4("Noise &amp; sample"),
-        sliderInput("s3_noise",  "Noise",
-                    min=0.05, max=0.8, value=0.25, step=0.05),
-        sliderInput("s3_n",      "N",
-                    min=50, max=500, value=200, step=50),
-        actionButton("resample3","Resample",class="btn btn-primary btn-sm")
-      )
-    ),
-    column(8,
-      plotOutput("scatter3", height="320px"),
-      hr(),
-      fluidRow(
-        column(3,
-          div(class="stat-label","Observed r"),
-          div(class="stat-value", textOutput("r3_obs", inline=TRUE))
-        ),
-        column(3,
-          div(class="stat-label","Causal fraction"),
-          div(class="stat-value",style="color:#2d7d46", textOutput("r3_causal", inline=TRUE))
-        ),
-        column(3,
-          div(class="stat-label","Confound fraction"),
-          div(class="stat-value",style="color:#c0392b", textOutput("r3_confound", inline=TRUE))
-        ),
-        column(3,
-          uiOutput("target_msg")
-        )
-      ),
-      p(style="font-size:12px;color:#777;margin-top:10px;",
-        "Grey band = target r ∈ [0.85, 0.95] (approx. Marques et al. 2025). ",
-        "How many different causal worlds hit the same target?")
-    )
-  )
-)
-
-server &lt;- function(input, output, session) {
-
-  sim3 &lt;- reactive({
-    input$resample3
-    n    &lt;- input$s3_n
-    b_d  &lt;- input$s3_direct
-    b_c  &lt;- input$s3_common
-    sig  &lt;- input$s3_noise
-    sc   &lt;- input$s3_scale
-    bv   &lt;- input$s3_bv
-
-    training &lt;- rnorm(n)
-    S0 &lt;- pmax(0.2, 1 + bv * rnorm(n))
-    F0 &lt;- pmax(0.2, 1 + bv * rnorm(n))
-
-    dS_abs &lt;- pmax(0.01, b_c * training * 0.15 + 0.08 + sig * 0.05 * rnorm(n))
-    dF_direct  &lt;- b_d * dS_abs
-    dF_common  &lt;- b_c * training * 0.15
-    dF_abs &lt;- dF_direct + dF_common + sig * 0.05 * rnorm(n)
-
-    # blend between absolute and % scale
-    x_mix &lt;- (1 - sc) * dS_abs + sc * (dS_abs / S0)
-    y_mix &lt;- (1 - sc) * dF_abs + sc * (dF_abs / pmax(0.01, F0))
-
-    list(
-      x = x_mix, y = y_mix,
-      causal_frac  = b_d^2 / (b_d^2 + b_c^2 + sig^2 + 1e-4),
-      confound_frac = b_c^2 / (b_d^2 + b_c^2 + sig^2 + 1e-4)
-    )
+  output$causal_share &lt;- renderUI({
+    world &lt;- current_world()
+    if (world == "direct") {
+      total &lt;- input$b_sf^2 + input$b_tf^2 + input$sig^2 + 1e-4
+      pct   &lt;- round(100 * input$b_sf^2 / total)
+      div(class="stat-value green", paste0(pct, "%"))
+    } else if (world == "confound") {
+      div(class="stat-value red", "0%")
+    } else {
+      div(class="stat-value", style="color:#888;font-size:1rem",
+          "0% — M and S are independent")
+    }
   })
 
-  output$scatter3 &lt;- renderPlot({
-    s   &lt;- sim3()
-    r   &lt;- cor(s$x, s$y)
-    d   &lt;- data.frame(x=s$x, y=s$y)
-
-    # y-range for target band
-    yr  &lt;- range(s$y)
-    band_lo &lt;- yr[1] + 0.85 * diff(yr)
-    band_hi &lt;- yr[1] + 0.95 * diff(yr)
-
-    ggplot(d, aes(x, y)) +
-      annotate("rect",
-               xmin=-Inf, xmax=Inf,
-               ymin=band_lo, ymax=band_hi,
-               fill="grey80", alpha=0.4) +
-      annotate("text", x=min(d$x)+0.01*diff(range(d$x)),
-               y=mean(c(band_lo,band_hi)),
-               label="target r ∈ [0.85, 0.95]",
-               hjust=0, size=3, colour="grey50") +
-      geom_point(colour="#2c6e8a", alpha=0.35, size=1.8) +
-      geom_smooth(method="lm", se=TRUE,
-                  colour="#c0392b", fill="#e74c3c",
-                  alpha=0.12, linetype="dashed", linewidth=0.8) +
-      labs(x = ifelse(input$s3_scale &lt; 0.5, "Δ Size (absolute mix)", "% Δ Size (pct mix)"),
-           y = ifelse(input$s3_scale &lt; 0.5, "Δ Strength (absolute mix)", "% Δ Strength (pct mix)"),
-           title = sprintf("Observed r = %.2f", r)) +
-      theme_minimal(base_size=13) +
-      theme(plot.title=element_text(face="bold",colour="#1a1a1a"))
-  })
-
-  output$r3_obs     &lt;- renderText({ sprintf("%.2f", cor(sim3()$x, sim3()$y)) })
-  output$r3_causal  &lt;- renderText({ sprintf("%.0f%%", 100 * sim3()$causal_frac) })
-  output$r3_confound &lt;- renderText({ sprintf("%.0f%%", 100 * sim3()$confound_frac) })
-
-  output$target_msg &lt;- renderUI({
-    r &lt;- cor(sim3()$x, sim3()$y)
-    in_target &lt;- r &gt;= 0.85 &amp; r &lt;= 0.95
-    div(id="target_msg",
-        style=paste0("background:", if(in_target) "#d5f5e3" else "#fdecea",
-                     ";color:", if(in_target) "#1e8449" else "#922b21", ";"),
-        if(in_target) "✓ In target zone" else "✗ Outside target"
+  output$world_label &lt;- renderText({
+    switch(current_world(),
+      direct   = "Direct causation",
+      confound = "Confounding",
+      collider = "Collider / Selection"
     )
   })
 }
 
 shinyApp(ui, server)</code></pre>
-<blockquote class="blockquote">
-<p>You should find it easy to achieve r &gt; 0.85 even with the direct effect at zero, by increasing the common-cause coefficient and switching to percentage scaling. Conversely, a substantial direct effect can yield r ≈ 0.3 if baseline variability is high and you measure absolute changes in a multiplicative world. <strong>The same number can arise from very different data-generating processes.</strong></p>
-</blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>What to look for
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Scenario 1:</strong> Even when M genuinely causes S, the observed correlation reflects more than just that causal effect — training is simultaneously pushing both variables up, inflating the association beyond what the M→S arrow alone would produce. The causal share displayed is the fraction of variance in S attributable to M in this simplified model — an upper bound, not a precise estimate.</li>
+<li><strong>Scenario 2:</strong> The Size → Strength effect is set to zero — yet a meaningful correlation appears, driven entirely by training as a shared upstream cause. Try resampling several times to see how stable it is.</li>
+<li><strong>Scenario 3:</strong> Grey points are the full population — M and S are completely independent. Red points are athletes who made it into a competitive powerlifting dataset. The regression line is fitted to red points only. A spurious association emerges purely from who got selected, not from any biological relationship between the two variables.</li>
+</ul>
+</div>
+</div>
 <hr>
 </section>
-<section id="what-would-actually-help" class="level2">
-<h2 class="anchored" data-anchor-id="what-would-actually-help">What Would Actually Help?</h2>
-<p>To answer whether muscle size <em>causally</em> affects strength, we need one of the following:</p>
-<p><strong>1. Experimental variation in size independent of training load.</strong> If you could randomly assign participants to gain different amounts of muscle (via BFR, very different rep ranges equated for effort, or pharmacological aids) while holding training volume and motor learning constant, you could estimate the causal effect. Some designs come close, but unmeasured confounders remain.</p>
-<p><strong>2. A formal causal mediation analysis</strong> — which attempts to decompose the total effect of training into the portion that runs <em>through</em> muscle growth and the portion that bypasses it (neural adaptations, etc.).</p>
-<p>Crucially, however, even causal mediation analysis makes strong assumptions that are unlikely to hold perfectly. <strong>Part II of this series</strong> will dig into the mediation framework, and <strong>Part III</strong> will show exactly where those assumptions break — and what happens to our estimates when they do.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The three scenarios above share a common thread: in each one, a researcher running a standard correlation analysis would observe an association between <span class="math inline">\(\Delta M\)</span> and <span class="math inline">\(\Delta S\)</span> and face the same temptation — to read it as evidence that muscle growth drives strength gains. In Scenario 1, that interpretation would be directionally correct but would still overstate the isolated contribution of size. In Scenarios 2 and 3, it would be entirely wrong.</p>
+<p>This is not a criticism of the researchers who run these studies. Most papers in this literature are careful — they report associations and note, somewhere in the discussion, that causation cannot be inferred. The problem is that the moment a finding enters circulation, the causal reading tends to follow automatically. We see a correlation of 0.9 and hear that muscle size drives strength. The disclaimer quietly disappears.</p>
+<p>What we need is not more careful disclaimers. We need a framework that makes explicit what we are assuming when we move from an observed association to a causal claim — and that allows us to ask whether those assumptions are reasonable given what we know about how training adaptations work. That framework exists, and it is the subject of Part II.</p>
 <hr>
 </section>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Problem</th>
-<th>Mechanism</th>
-<th>Fix</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Confounding</td>
-<td>Training drives both size and strength</td>
-<td>Randomise size <em>independently</em> of training</td>
-</tr>
-<tr class="even">
-<td>Collider bias</td>
-<td>Selecting on a common effect of both</td>
-<td>Avoid conditioning on downstream variables</td>
-</tr>
-<tr class="odd">
-<td>Scale artefact</td>
-<td>Absolute vs.&nbsp;% change in add./mult. world</td>
-<td>Pre-register scale; sensitivity across both</td>
-</tr>
-<tr class="even">
-<td>Identification</td>
-<td>Many causal worlds → same r</td>
-<td>Need causal assumptions, not just data</td>
-</tr>
-</tbody>
-</table>
-<p>Correlations between hypertrophy and strength gains arise from at least three structural mechanisms, any of which can produce arbitrarily high observed correlations. No correlation statistic — Pearson, repeated-measures, or otherwise — can distinguish between them without additional assumptions about the causal graph.</p>
-<p>Beyond causal structure, the scale of measurement interacts with the data-generating process to produce correlations that reflect the researcher’s analytic choices as much as the underlying biology.</p>
-<p>The conclusion is not that muscle size does not cause strength — it clearly contributes. The conclusion is that the correlation coefficient is a blunt, causally agnostic tool that cannot tell us how much it contributes, under what conditions, or for whom. For that, we need a different framework.</p>
-<p><em>That is where we are going next.</em></p>
-<hr>
-<p><em>Simulations are stochastic; resample to build intuition across runs. All data are synthetic.</em></p>
-</section>
-<section id="session-info" class="level2">
-<h2 class="anchored" data-anchor-id="session-info">Session info</h2>
-<div class="cell">
-<details class="code-fold">
-<summary>Show R code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.6.0 (2026-04-24)
-Platform: aarch64-apple-darwin23
-Running under: macOS Tahoe 26.5.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
-
-locale:
-[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
-
-time zone: Europe/Helsinki
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.4 compiler_4.6.0    fastmap_1.2.0     cli_3.6.6        
- [5] tools_4.6.0       htmltools_0.5.9   otel_0.2.0        yaml_2.3.12      
- [9] rmarkdown_2.31    knitr_1.51        jsonlite_2.0.0    xfun_0.58        
-[13] digest_0.6.39     rlang_1.2.0       evaluate_1.0.5   </code></pre>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-hernanCausalInferenceWhat2026" class="csl-entry" role="listitem">
+Hernan, Miguel A., and James M. Robins. 2026. <em>Causal <span>Inference</span>: <span>What If</span></em>. Boca Raton: CRC Press.
 </div>
 </div>
 
@@ -1261,26 +1155,52 @@ loaded via a namespace (and not attached):
       &nbsp;
     </div>
     <div class="nav-footer-right">
-      <ul class="footer-items list-unstyled">
-    <li class="nav-item">
-    <a class="nav-link" href="../index.html">
-<p>Home</p>
-</a>
-  </li>  
-    <li class="nav-item">
-    <a class="nav-link" href="../works.html">
-<p>Works</p>
-</a>
-  </li>  
-    <li class="nav-item">
-    <a class="nav-link" href="../blog.html">
-<p>Blog</p>
-</a>
-  </li>  
-</ul>
-    </div>
+<div class="footer-socials">
+<p><a href="https://github.com/veluimmonen" class="social-icon" target="_blank" rel="noopener" aria-label="GitHub"> <i class="bi bi-github"></i> </a> <a href="https://www.instagram.com/veluimmonen/" class="social-icon" target="_blank" rel="noopener" aria-label="Instagram"> <i class="bi bi-instagram"></i> </a> <a href="https://www.researchgate.net/profile/Velu-Immonen" class="social-icon" target="_blank" rel="noopener" aria-label="ResearchGate"> <svg viewbox="0 0 24 24" fill="currentColor" class="social-svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.586 0H4.413A4.413 4.413 0 0 0 0 4.413v15.173A4.413 4.413 0 0 0 4.413 24h15.173A4.413 4.413 0 0 0 24 19.586V4.413A4.413 4.413 0 0 0 19.586 0ZM15.384 17.53h-2.858l-2.574-5.332h-.918V17.53H6.734V6.47h4.61c2.443 0 3.808 1.162 3.808 3.207 0 1.487-.87 2.554-2.34 2.94Zm-3.843-7.485c0-.87-.55-1.24-1.72-1.24H9.034v2.538H9.7c1.3 0 1.841-.49 1.841-1.298Zm4.988 3.26h-1.34v1.34h-.893v-1.34h-1.34v-.893h1.34v-1.34h.893v1.34h1.34Z"></path></svg> </a></p>
+</div>
+</div>
   </div>
 </footer>
+<script>
+  /* Animated wordmark: VELU /MMONEN <-> V/
+     Runs after </body> so Quarto's navbar DOM is fully settled. */
+  (function () {
+    function buildLogo() {
+      var brand = document.querySelector('.navbar-brand');
+      if (!brand) return false;
+      if (brand.querySelector('.logo-collapse')) return true;
+
+      brand.setAttribute('aria-label', 'Velu Immonen');
+
+      var v = document.createElement('span');
+      v.textContent = 'V';
+
+      var elu = document.createElement('span');
+      elu.className = 'logo-collapse';
+      elu.textContent = 'ELU';
+
+      var i = document.createElement('span');
+      i.className = 'logo-accent';
+      i.textContent = 'I';
+
+      var mmonen = document.createElement('span');
+      mmonen.className = 'logo-collapse logo-accent';
+      mmonen.textContent = 'MMONEN';
+
+      while (brand.firstChild) brand.removeChild(brand.firstChild);
+      brand.appendChild(v);
+      brand.appendChild(elu);
+      brand.appendChild(i);
+      brand.appendChild(mmonen);
+      return true;
+    }
+
+    /* DOM is already parsed at this point; run immediately then retry
+       once more at 200ms in case Quarto re-renders the navbar */
+    buildLogo();
+    setTimeout(buildLogo, 200);
+  })();
+</script>
 
 
 
