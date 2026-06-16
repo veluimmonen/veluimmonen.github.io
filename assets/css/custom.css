@@ -274,6 +274,9 @@ body.nav-scrolled .logo-collapse {
   border-top: 1px solid var(--border) !important;
   font-size: 0.8rem;
   color: var(--text-dim) !important;
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+  align-items: flex-end !important;  /* push content to bottom of footer bar */
 }
 
 .nav-footer a { color: var(--text-muted) !important; }
@@ -283,12 +286,12 @@ body.nav-scrolled .logo-collapse {
 .nav-footer-right {
   display: flex !important;
   justify-content: flex-end !important;
-  align-items: center !important;
+  align-items: flex-end !important;
 }
 
 .footer-socials {
   display: flex;
-  gap: 1.75rem;
+  gap: 2.25rem;
   align-items: center;
 }
 
@@ -682,22 +685,12 @@ body.nav-scrolled .logo-collapse {
   border-left: 3px solid var(--accent) !important;
 }
 
-/* Override Bootstrap's success/green — callout-tip icon uses this via background-image SVG */
-.callout-tip {
-  --bs-success: var(--accent) !important;
-  --bs-success-rgb: 6, 182, 212 !important;
-}
-
-/* Hue-shift the baked-in green SVG icon toward teal as a reliable fallback */
-.callout-tip .callout-icon-container {
-  filter: hue-rotate(26deg) saturate(0.9) brightness(1.15);
-}
-
-/* SVG icon if rendered inline */
-.callout .callout-header svg,
-.callout-tip .callout-header svg {
-  color: var(--accent) !important;
-  fill: var(--accent) !important;
+/* Replace the green lightbulb icon with an identical SVG in exact teal (#06b6d4).
+   Quarto bakes the color into a background-image data URI, so we must override the
+   whole property — filter/CSS-var approaches cannot reach inside the data URI. */
+.callout-tip .callout-icon::before,
+.callout-tip > .callout-header .callout-icon::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2306b6d4' viewBox='0 0 16 16'%3E%3Cpath d='M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z'/%3E%3C/svg%3E") !important;
 }
 
 .callout-warning {
