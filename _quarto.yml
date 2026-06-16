@@ -6,8 +6,6 @@ website:
   title: "Velu Immonen"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
       - href: works.qmd
         text: Works
       - href: blog.qmd

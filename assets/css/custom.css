@@ -115,9 +115,9 @@ body {
    Typography
    =========================== */
 
-/* H1 — large editorial serif titles */
+/* H1 — large modern sans titles (matches blog headings) */
 h1 {
-  font-family: var(--font-head) !important;
+  font-family: var(--font-ui) !important;
   color: var(--text-bright) !important;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -533,10 +533,11 @@ body.nav-scrolled .logo-collapse {
 
 .quarto-listing-default .listing-title a:hover { color: var(--accent) !important; }
 
-/* Description */
+/* Description — explicit white/bright so it doesn't inherit link blue from card <a> */
 .quarto-listing-default .listing-description,
-.quarto-listing-default .description {
-  color: var(--text-muted) !important;
+.quarto-listing-default .description,
+.quarto-listing-default .quarto-post .listing-description {
+  color: var(--text-bright) !important;
   font-size: 0.92rem !important;
   line-height: 1.65 !important;
   margin-bottom: 1rem !important;

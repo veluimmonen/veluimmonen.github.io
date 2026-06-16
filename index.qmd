@@ -13,14 +13,13 @@ listing:
 
 ::: {.home-hero}
 ::: {.eyebrow}
-Southampton Solent University · Exercise Science
+Exercise Scientist
 :::
 
 # Velu Immonen.
 
 ::: {.tagline}
-PhD student researching the relationship between muscle size and strength.
-Based in Southampton.
+PhD student researching the relationship between muscle size and strength at Southampton Solent University.
 :::
 
 ::: {.home-ctas}
