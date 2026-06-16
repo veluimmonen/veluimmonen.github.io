@@ -245,19 +245,24 @@ body.nav-scrolled .navbar {
   overflow: hidden;
   white-space: nowrap;
   max-width: 9em;       /* wide enough for longest part */
+  /* Expand (scroll back to top) — slow, so the full name reveals gracefully */
   transition:
-    max-width 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity   0.6s ease;
+    max-width 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity   0.45s ease;
 }
 
 body.nav-scrolled .logo-collapse {
   max-width: 0;
   opacity: 0;
+  /* Collapse (scroll down) — fast, completes before navbar scrolls out of view */
+  transition:
+    max-width 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity   0.18s ease;
 }
 
-/* The "/" — accent colour, always visible */
+/* The "/" — white to match V glyph, no accent tint */
 .logo-slash {
-  color: var(--accent);
+  color: var(--text-bright);
   display: inline-block;
   flex-shrink: 0;
 }

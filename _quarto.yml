@@ -66,10 +66,10 @@ format:
                 svg.setAttribute('class', 'logo-v-glyph');
                 svg.setAttribute('aria-hidden', 'true');
                 var path = document.createElementNS(NS, 'path');
-                path.setAttribute('d', 'M2,1 L2,21 L19,1');
+                path.setAttribute('d', 'M1,2 L10,20 L19,2');
                 path.setAttribute('fill', 'none');
                 path.setAttribute('stroke', 'currentColor');
-                path.setAttribute('stroke-width', '2.2');
+                path.setAttribute('stroke-width', '2.5');
                 path.setAttribute('stroke-linecap', 'round');
                 path.setAttribute('stroke-linejoin', 'round');
                 svg.appendChild(path);
